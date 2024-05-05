@@ -7,26 +7,36 @@ import Navbar from "../components/navbar";
 import { useAppContext } from "../context/state";
 import { register } from "../data/auth";
 
+type User = {
+  username: string;
+  password: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+};
+
 export default function Register() {
   const { setToken } = useAppContext();
 
-  const firstName = useRef("");
-  const lastName = useRef("");
-  const username = useRef("");
-  const password = useRef("");
+  const firstName = useRef<HTMLInputElement>(null);
+  const lastName = useRef<HTMLInputElement>(null);
+  const username = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
+  const email = useRef<HTMLInputElement>(null);
   const router = useRouter();
 
-  const submit = (e) => {
+  const submit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const user = {
-      username: username.current.value,
-      password: password.current.value,
-      first_name: firstName.current.value,
-      last_name: lastName.current.value,
+    const user: User = {
+      username: username.current?.value || "",
+      password: password.current?.value || "",
+      first_name: firstName.current?.value || "",
+      last_name: lastName.current?.value || "",
+      email: email.current?.value || "",
     };
 
-    register(user).then((res) => {
+    await register(user).then((res) => {
       if (res.token) {
         setToken(res.token);
         router.push("/");
@@ -37,7 +47,7 @@ export default function Register() {
   return (
     <div className="columns is-centered">
       <div className="column is-half">
-        <form className="box">
+        <form className="box" onSubmit={submit}>
           <h1 className="title">Welcome!</h1>
           <Input
             id="firstName"
@@ -57,7 +67,7 @@ export default function Register() {
 
           <div className="field is-grouped">
             <div className="control">
-              <button className="button is-link" onClick={submit}>
+              <button className="button is-link" type="submit">
                 Submit
               </button>
             </div>
@@ -73,7 +83,7 @@ export default function Register() {
   );
 }
 
-Register.getLayout = function getLayout(page) {
+Register.getLayout = function getLayout(page: JSX.Element) {
   return (
     <Layout>
       <Navbar />
