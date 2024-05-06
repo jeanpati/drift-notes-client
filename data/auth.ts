@@ -34,9 +34,6 @@ export function register(user: RegisterUser) {
 
 export function getUserProfile() {
   const token = localStorage.getItem("token");
-  if (!token) {
-    throw Error("Missing authorization token");
-  }
   return fetchWithResponse("profile", {
     headers: {
       Authorization: `Token ${token}`,

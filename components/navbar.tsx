@@ -12,13 +12,10 @@ export default function Navbar(): JSX.Element {
   useEffect(() => {
     if (token) {
       setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
     }
   }, [token]);
 
   const handleLogout = () => {
-    debugger;
     setProfile({
       id: 0,
       username: "",

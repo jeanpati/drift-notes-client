@@ -23,7 +23,7 @@ export default function Login() {
     login(user).then((res) => {
       if (res.token) {
         setToken(res.token);
-        router.push("/");
+        router.push("/dashboard");
       }
     });
   };
