@@ -1,6 +1,7 @@
 import React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllTrips } from "../../data/trips";
+import Link from "next/link";
 
 interface TripData {
   id: number;
@@ -38,16 +39,18 @@ export default function TripList() {
           <div className="px-4 py-5 sm:p-6">No upcoming trips</div>
         ) : (
           upcomingTrips.map((trip: TripData) => (
-            <li key={trip.id} className="px-4 py-4 sm:px-6">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium text-indigo-600 truncate">
-                  <>
-                    {trip.title} - {trip.city} ({trip.start_date} -{" "}
-                    {trip.end_date})
-                  </>
+            <Link key={trip.id} href={`/trips/${trip.id}`}>
+              <li className="px-4 py-4 sm:px-6">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-medium text-indigo-600 truncate">
+                    <>
+                      {trip.title} - {trip.city} ({trip.start_date} -{" "}
+                      {trip.end_date})
+                    </>
+                  </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            </Link>
           ))
         )}
       </ul>
@@ -61,16 +64,18 @@ export default function TripList() {
           <div className="px-4 py-5 sm:p-6">No past trips</div>
         ) : (
           pastTrips.map((trip: TripData) => (
-            <li key={trip.id} className="px-4 py-4 sm:px-6">
-              <div className="flex items-center justify-between">
-                <div className="text-sm font-medium text-indigo-600 truncate">
-                  <>
-                    {trip.title} - {trip.city} ({trip.start_date} -{" "}
-                    {trip.end_date})
-                  </>
+            <Link key={trip.id} href={`/trips/${trip.id}`}>
+              <li className="px-4 py-4 sm:px-6">
+                <div className="flex items-center justify-between">
+                  <div className="text-sm font-medium text-indigo-600 truncate">
+                    <>
+                      {trip.title} - {trip.city} ({trip.start_date} -{" "}
+                      {trip.end_date})
+                    </>
+                  </div>
                 </div>
-              </div>
-            </li>
+              </li>
+            </Link>
           ))
         )}
       </ul>
