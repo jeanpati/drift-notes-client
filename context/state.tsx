@@ -36,10 +36,6 @@ const AppContext = createContext<AppContextType>({
   setToken: () => {},
 });
 
-export function useAppContext() {
-  return useContext(AppContext);
-}
-
 // : is for type annotation - specifies type of a variable, function parameter, or function return value
 // <> is for type assertion - explicity telling TS the type of a value
 
@@ -70,11 +66,15 @@ export function AppWrapper({ children }: { children: ReactNode }) {
         });
       }
     }
-  }, [token, profile]);
+  }, [token]);
 
   return (
     <AppContext.Provider value={{ profile, token, setToken, setProfile }}>
       {children}
     </AppContext.Provider>
   );
+}
+
+export function useAppContext() {
+  return useContext(AppContext);
 }
