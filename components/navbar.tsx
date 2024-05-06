@@ -36,6 +36,9 @@ export default function Navbar(): JSX.Element {
             <i className="fas fa-user-circle is-medium"></i>
           </span>
         </a>
+        <Link href="/dashboard" className="button is-light">
+          Dashboard
+        </Link>
         <a onClick={handleLogout}>Log out</a>
       </div>
     );
