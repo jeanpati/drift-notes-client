@@ -1,7 +1,16 @@
 import React from "react";
+import Layout from "../../../components/layout";
+import Navbar from "../../../components/navbar";
 
-const EditTripPage: React.FC = () => {
+export default function EditTrip() {
   return <div>Edit Trip Page</div>;
-};
+}
 
-export default EditTripPage;
+EditTrip.getLayout = function getLayout(page: JSX.Element) {
+  return (
+    <Layout>
+      <Navbar />
+      {page}
+    </Layout>
+  );
+};

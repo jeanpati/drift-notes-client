@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 
-const RedirectToDashboard = () => {
+export default function RedirectToDashboard() {
   const router = useRouter();
 
   useEffect(() => {
@@ -9,6 +9,4 @@ const RedirectToDashboard = () => {
   }, []);
 
   return null;
-};
-
-export default RedirectToDashboard;
+}

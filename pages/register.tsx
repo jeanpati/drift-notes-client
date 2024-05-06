@@ -57,6 +57,7 @@ export default function Register() {
           />
           <Input id="lastName" refEl={lastName} type="text" label="Last Name" />
 
+          <Input id="email" refEl={email} type="text" label="Email" />
           <Input id="username" refEl={username} type="text" label="Username" />
           <Input
             id="password"
