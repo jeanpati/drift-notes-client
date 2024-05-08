@@ -1,7 +1,15 @@
 import React from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAllTrips } from "../../data/trips";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from "@tanstack/react-query";
+import { deleteTrip, getAllTrips, getTripById } from "../../data/trips";
 import Link from "next/link";
+import { useAppContext } from "../../context/state";
+import { deleteUserTrip, getAllUserTrips } from "../../data/usertrips";
+import { useRouter } from "next/router";
 
 interface TripData {
   id: number;
@@ -12,9 +20,26 @@ interface TripData {
 }
 
 export default function TripList() {
+  const queryClient = useQueryClient();
   const { data: trips, isLoading } = useQuery({
     queryKey: ["trips"],
     queryFn: getAllTrips,
+  });
+  const router = useRouter();
+
+  const { mutateAsync: deleteTripMutation } = useMutation({
+    mutationFn: deleteTrip,
+    onError: (error: any) => {
+      if (error.response.status === 500) {
+        console.error("Server error: ", error.response.data);
+        window.alert("Users can only delete trips they have created o>o");
+      } else {
+        console.error("Error deleting trip:", error);
+      }
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["trips"] });
+    },
   });
 
   if (isLoading) return <div>Loading...</div>;
@@ -34,6 +59,13 @@ export default function TripList() {
     const year = date.getFullYear();
     return `${month}/${day}/${year}`;
   };
+  const handleDelete = async (tripId: number) => {
+    await deleteTripMutation(tripId);
+  };
+
+  const handleUpdate = (id: any) => {
+    router.push(`/trips/${id}/edit`);
+  };
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
@@ -47,18 +79,37 @@ export default function TripList() {
           <div className="px-4 py-5 sm:p-6">No upcoming trips</div>
         ) : (
           upcomingTrips.map((trip: TripData) => (
-            <Link key={trip.id} href={`/trips/${trip.id}`}>
-              <li className="px-4 py-4 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-indigo-600 truncate">
-                    <>
-                      {trip.title} - {trip.city} ({formatDate(trip.start_date)}{" "}
-                      - {formatDate(trip.end_date)})
-                    </>
+            <div key={trip.id}>
+              <Link key={trip.id} href={`/trips/${trip.id}`}>
+                <li className="px-4 py-4 sm:px-6">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-medium text-indigo-600 truncate">
+                      <>
+                        {trip.title} - {trip.city} (
+                        {formatDate(trip.start_date)} -{" "}
+                        {formatDate(trip.end_date)})
+                      </>
+                    </div>
                   </div>
-                </div>
-              </li>
-            </Link>
+                </li>
+              </Link>
+              <button
+                onClick={() => {
+                  handleDelete(trip.id);
+                }}
+                className="bg-red-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => {
+                  handleUpdate(trip.id);
+                }}
+                className="bg-blue-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
+              >
+                Edit
+              </button>
+            </div>
           ))
         )}
       </ul>
@@ -72,18 +123,37 @@ export default function TripList() {
           <div className="px-4 py-5 sm:p-6">No past trips</div>
         ) : (
           pastTrips.map((trip: TripData) => (
-            <Link key={trip.id} href={`/trips/${trip.id}`}>
-              <li className="px-4 py-4 sm:px-6">
-                <div className="flex items-center justify-between">
-                  <div className="text-sm font-medium text-indigo-600 truncate">
-                    <>
-                      {trip.title} - {trip.city} ({formatDate(trip.start_date)}{" "}
-                      - {formatDate(trip.end_date)})
-                    </>
+            <div key={trip.id}>
+              <Link href={`/trips/${trip.id}`}>
+                <li className="px-4 py-4 sm:px-6">
+                  <div className="flex items-center justify-between">
+                    <div className="text-sm font-medium text-indigo-600 truncate">
+                      <>
+                        {trip.title} - {trip.city} (
+                        {formatDate(trip.start_date)} -{" "}
+                        {formatDate(trip.end_date)})
+                      </>
+                    </div>
                   </div>
-                </div>
-              </li>
-            </Link>
+                </li>
+              </Link>
+              <button
+                onClick={() => {
+                  handleDelete(trip.id);
+                }}
+                className="bg-red-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => {
+                  handleUpdate(trip.id);
+                }}
+                className="bg-blue-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
+              >
+                Edit
+              </button>
+            </div>
           ))
         )}
       </ul>

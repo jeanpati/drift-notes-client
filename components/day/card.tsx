@@ -1,19 +1,9 @@
-import {
-  useQueryClient,
-  useQuery,
-  useMutation,
-  QueryKey,
-} from "@tanstack/react-query";
+import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useState } from "react";
 import { Trip } from "../../data/trips";
 import { getDayById } from "../../data/days"; // Importing getDayById function
-import {
-  getAllEvents,
-  Event,
-  updateEvent,
-  createEvent,
-} from "../../data/events"; // Importing getAllEvents and updateEvent functions
+import { getAllEvents, Event, createEvent } from "../../data/events"; // Importing getAllEvents and updateEvent functions
 import { EventCard } from "../event/card";
 import { getAllCategories } from "../../data/categories";
 import EventModal from "../event/form-modal";
@@ -31,15 +21,20 @@ export interface Category {
 
 export interface DayColumnProps {
   day: Day;
-  onEventDrop: (
-    event: Event,
-    day: number,
-    start_time: string,
-    end_time: string
-  ) => void;
+}
+export function DayCarousel({ days }: any) {
+  return (
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {days.map((day: any) => (
+        <div key={day.id} className="bg-white rounded-lg shadow-md">
+          <DayColumn day={day} />
+        </div>
+      ))}
+    </div>
+  );
 }
 
-export function DayColumn({ day, onEventDrop }: DayColumnProps) {
+export function DayColumn({ day }: DayColumnProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
   const {
     data: dayData,
@@ -47,7 +42,7 @@ export function DayColumn({ day, onEventDrop }: DayColumnProps) {
     isError: isDayError,
   } = useQuery<Day, Error>({
     queryKey: ["day", day.id],
-    queryFn: () => getDayById(day.id), // Using getDayById function
+    queryFn: () => getDayById(day.id),
   });
 
   const {
@@ -55,8 +50,8 @@ export function DayColumn({ day, onEventDrop }: DayColumnProps) {
     isLoading: isEventLoading,
     isError: isEventError,
   } = useQuery<Event[], Error>({
-    queryFn: getAllEvents, // Fetching all events
-    queryKey: ["events"], // Change the queryKey to an array
+    queryFn: getAllEvents,
+    queryKey: ["events"],
   });
 
   const { data: categories } = useQuery({
@@ -107,41 +102,51 @@ export function DayColumn({ day, onEventDrop }: DayColumnProps) {
   if (isDayError || isEventError || !dayData || !allEventsData)
     return <div>Error fetching data</div>;
 
-  const generateTimeSlots = () => {
-    const timeSlots = [];
-    for (let hour = 4; hour <= 27; hour++) {
-      const time = new Date(0, 0, 0, hour % 24)
-        .toLocaleTimeString("en-US", {
-          hour: "numeric",
-          hour12: true,
-        })
-        .toLowerCase();
-      timeSlots.push(time);
-    }
-    return timeSlots;
-  };
+  // const generateTimeSlots = () => {
+  //   const timeSlots = [];
+  //   for (let hour = 4; hour <= 27; hour++) {
+  //     const time = new Date(0, 0, 0, hour % 24)
+  //       .toLocaleTimeString("en-US", {
+  //         hour: "numeric",
+  //         hour12: true,
+  //       })
+  //       .toLowerCase();
+  //     timeSlots.push(time);
+  //   }
+  //   return timeSlots;
+  // };
 
-  const timeSlots = generateTimeSlots();
-  const getEventStartIndex = (startTime: string) => {
-    const [hours, minutes] = startTime.split(":").map((val) => parseInt(val));
-    return hours - 4 + minutes / 60;
-  };
+  // const timeSlots = generateTimeSlots();
+  // const getEventStartIndex = (startTime: string) => {
+  //   const [hours, minutes] = startTime.split(":").map((val) => parseInt(val));
+  //   return hours - 4 + minutes / 60;
+  // };
 
   return (
     <div className="border rounded-lg p-4 relative">
       <h2 className="text-xl font-bold mb-2">
         {new Date(day.date).toLocaleDateString()}
       </h2>
-      <div className="border rounded-lg p-4">
-        <EventModal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          dayId={day.id}
-          createEventMutation={createEventMutation}
-          categories={categories || []} // Pass the categories data or an empty array
-        />
-      </div>
-      <div className="grid grid-cols-4 gap-2 relative">
+      <>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          onClick={() => setShowModal(true)}
+        >
+          Create Event
+        </button>
+
+        {showModal && (
+          <EventModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            dayId={day.id}
+            createEventMutation={createEventMutation}
+            categories={categories || []} // Pass the categories data or an empty array
+          />
+        )}
+      </>
+
+      {/* <div className="grid grid-cols-4 gap-2 relative">
         {timeSlots.map((timeSlot, index) => (
           <React.Fragment key={index}>
             <div
@@ -151,20 +156,22 @@ export function DayColumn({ day, onEventDrop }: DayColumnProps) {
               {timeSlot}
             </div>
           </React.Fragment>
-        ))}
-        <div className="grid grid-cols-1 gap-2 ml-20 col-span-3 overflow-x-auto">
-          {allEventsData.map((event) => (
+        ))} */}
+      <div className="grid grid-cols-1 col-span-4 overflow-x-auto relative">
+        {allEventsData
+          .filter((event) => event.day?.id === day.id)
+          .map((event) => (
             <EventCard
               key={event.id}
               event={event}
               onDragStart={(e, eventData) => {
-                // Implement your drag start logic here
+                // drag start logic here
               }}
-              isDragging={false} // You can set this dynamically if needed
+              isDragging={false}
             />
           ))}
-        </div>
       </div>
     </div>
+    // </div>
   );
 }

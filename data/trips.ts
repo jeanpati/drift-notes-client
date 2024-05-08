@@ -1,8 +1,9 @@
 import { fetchWithResponse, fetchWithoutResponse } from "./fetcher";
+import { User } from "./users";
 
 export interface Trip {
   id?: number;
-  creator?: number;
+  creator?: User;
   title?: string;
   city?: string;
   start_date?: string;

@@ -15,7 +15,6 @@ interface EventProps {
 
 export function EventCard({ event, onDragStart, isDragging }: EventProps) {
   const categoryId = event.category?.id;
-  console.log("Event Category ID:", categoryId);
   const {
     data: category,
     isLoading: isLoadingCategory,

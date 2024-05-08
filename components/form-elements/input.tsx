@@ -4,7 +4,7 @@ interface InputProps {
   id: string;
   type?: string;
   placeholder?: string;
-  value?: string;
+  defaultValue?: string;
   refEl?: React.RefObject<HTMLInputElement>;
   label?: string;
   onChangeEvent?: React.ChangeEventHandler<HTMLInputElement>;
@@ -16,7 +16,7 @@ export function Input({
   id,
   type = "text",
   placeholder = "",
-  value = "",
+  defaultValue = "",
   refEl = undefined,
   label = undefined,
   onChangeEvent,
@@ -32,7 +32,7 @@ export function Input({
           placeholder={placeholder}
           className="input"
           type={type}
-          value={value}
+          defaultValue={defaultValue}
           ref={refEl}
           onChange={onChangeEvent}
         ></input>

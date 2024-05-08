@@ -8,10 +8,11 @@ import { getTripById, Trip } from "../../../data/trips";
 import { getAllDays } from "../../../data/days";
 import { updateEvent, Event, getAllEvents } from "../../../data/events";
 import { DayColumn, Day } from "../../../components/day/card";
+import UserTripModal from "../../../components/usertrip/form-modal";
 
 export default function TripDetails() {
   const queryClient = useQueryClient();
-  const [showInviteModal, setShowInviteModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const { id } = router.query;
   const {
@@ -97,6 +98,23 @@ export default function TripDetails() {
 
   return (
     <div className="container mx-auto py-8">
+      <>
+        <button
+          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+          onClick={() => setShowModal(true)}
+        >
+          Add Users
+        </button>
+
+        {showModal && (
+          <UserTripModal
+            showModal={showModal}
+            setShowModal={setShowModal}
+            tripId={Number(id)}
+          />
+        )}
+      </>
+
       <h1 className="text-3xl font-bold mb-4">{trip?.title}</h1>
       <p className="text-gray-600 mb-8">
         {trip?.city} | {formatDate(trip?.start_date)} -{" "}
@@ -106,16 +124,9 @@ export default function TripDetails() {
         {allDays
           ?.filter((day) => day.trip?.id === Number(id))
           .map((day: Day) => (
-            <DayColumn key={day.id} day={day} onEventDrop={handleEventDrop} />
+            <DayColumn key={day.id} day={day} />
           ))}
       </div>
-      <Modal
-        showModal={showInviteModal}
-        setShowModal={setShowInviteModal}
-        title="Invite User"
-      >
-        <form>{/* User invitation form */}</form>
-      </Modal>
     </div>
   );
 }

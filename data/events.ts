@@ -1,9 +1,9 @@
-import { Category } from "../components/day/card";
+import { Category, Day } from "../components/day/card";
 import { fetchWithResponse, fetchWithoutResponse } from "./fetcher";
 
 export interface Event {
   id?: number;
-  day?: number;
+  day?: Day;
   title?: string;
   location?: string;
   start_time?: string;
@@ -49,7 +49,7 @@ export function updateEvent(event: Event): Promise<Event> {
   });
 }
 
-export function deleteEvent(eventId: number) {
+export function deleteEvent(eventId: string) {
   return fetchWithoutResponse(`events/${eventId}`, {
     method: "DELETE",
     headers: {
