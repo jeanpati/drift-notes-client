@@ -1,16 +1,17 @@
+import { Category } from "../components/day/card";
 import { fetchWithResponse, fetchWithoutResponse } from "./fetcher";
 
 export interface Event {
   id?: number;
-  day: number;
-  title: string;
+  day?: number;
+  title?: string;
   location?: string;
   start_time?: string;
   end_time?: string;
-  category?: number;
+  category?: Category;
 }
 
-export function createEvent(event: Event) {
+export function createEvent(event: Event): Promise<Event> {
   return fetchWithResponse("events", {
     method: "POST",
     headers: {
@@ -37,8 +38,8 @@ export function getAllEvents() {
   });
 }
 
-export function updateEvent(eventId: number, event: Event) {
-  return fetchWithResponse(`events/${eventId}`, {
+export function updateEvent(event: Event): Promise<Event> {
+  return fetchWithResponse(`events/${event.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

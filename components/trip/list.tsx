@@ -27,6 +27,14 @@ export default function TripList() {
     (trip: TripData) => new Date(trip.end_date) < today
   );
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const month = date.getMonth() + 1;
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  };
+
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
       <div className="px-4 py-5 sm:px-6">
@@ -44,8 +52,8 @@ export default function TripList() {
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-medium text-indigo-600 truncate">
                     <>
-                      {trip.title} - {trip.city} ({trip.start_date} -{" "}
-                      {trip.end_date})
+                      {trip.title} - {trip.city} ({formatDate(trip.start_date)}{" "}
+                      - {formatDate(trip.end_date)})
                     </>
                   </div>
                 </div>
@@ -69,8 +77,8 @@ export default function TripList() {
                 <div className="flex items-center justify-between">
                   <div className="text-sm font-medium text-indigo-600 truncate">
                     <>
-                      {trip.title} - {trip.city} ({trip.start_date} -{" "}
-                      {trip.end_date})
+                      {trip.title} - {trip.city} ({formatDate(trip.start_date)}{" "}
+                      - {formatDate(trip.end_date)})
                     </>
                   </div>
                 </div>

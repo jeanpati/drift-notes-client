@@ -8,9 +8,11 @@ interface Option {
 interface SelectProps {
   id: string;
   refEl?: React.RefObject<HTMLSelectElement>;
+  onChangeEvent?: React.ChangeEventHandler<HTMLSelectElement>;
   options: Option[];
   title: string;
   label?: string;
+  value?: string;
   addlClass?: string;
 }
 
