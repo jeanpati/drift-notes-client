@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import Modal from "../modal";
 import { Input } from "../form-elements";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getAllUsers } from "../../data/users";
 import { createUserTrip, getAllUserTrips } from "../../data/usertrips";
 
@@ -17,13 +17,14 @@ export default function UserTripModal({
   tripId,
 }: UserTripModalProps) {
   const [user, setUser] = useState("");
+  const queryClient = useQueryClient();
 
   const { data: allUsersData } = useQuery({
     queryKey: ["allUsers"],
     queryFn: getAllUsers,
   });
   const { data: allUserTripData } = useQuery({
-    queryKey: ["allUserTrip"],
+    queryKey: ["allUserTrips"],
     queryFn: getAllUserTrips,
   });
 
@@ -31,29 +32,41 @@ export default function UserTripModal({
     setUser(e.target.value);
   };
 
+  const { mutateAsync: createUserTripMutation } = useMutation({
+    mutationFn: createUserTrip,
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["allUserTrips"] });
+      setShowModal(false);
+    },
+  });
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const foundUser = allUsersData?.find((u: any) => u.username === user);
     if (foundUser) {
+      console.log(foundUser);
       const newUserTrip = {
         user: foundUser.id,
         trip: tripId,
       };
-      createUserTrip(newUserTrip);
+      await createUserTripMutation(newUserTrip);
     }
   };
 
-  const collaborators = allUserTripData
-    ? allUserTripData
-        .filter((userTrip: any) => userTrip.trip.id === tripId)
-        .map((userTrip: any) => {
-          const foundUser = allUsersData.find(
-            (user: any) => user.id === userTrip.user.id
-          );
-          return foundUser ? foundUser.username : null;
-        })
-        .filter((username: any) => username) // Remove null values
-    : [];
+  const collaborators =
+    allUserTripData && allUsersData
+      ? allUserTripData
+          .filter((userTrip: any) => userTrip.trip.id === tripId)
+          .map((userTrip: any) => {
+            console.log(userTrip);
+            const foundUser = allUsersData.find(
+              (user: any) => user.id === userTrip.user.id
+            );
+            console.log(foundUser);
+            return foundUser ? foundUser.username : null;
+          })
+          .filter((username: any) => username)
+      : [];
 
   console.log(collaborators);
   return (
@@ -76,16 +89,15 @@ export default function UserTripModal({
               defaultValue={user}
               onChangeEvent={handleUserState}
             />
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+            >
+              Add Collaborator
+            </button>
           </form>
         </Modal>
       )}
-      <button
-        type="submit"
-        className="bg-blue-500 text-white px-4 py-2 rounded-md"
-        onClick={handleSubmit}
-      >
-        Add Collaborator
-      </button>
     </>
   );
 }

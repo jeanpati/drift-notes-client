@@ -11,7 +11,6 @@ import { DayColumn, Day } from "../../../components/day/card";
 import UserTripModal from "../../../components/usertrip/form-modal";
 
 export default function TripDetails() {
-  const queryClient = useQueryClient();
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const { id } = router.query;
@@ -95,7 +94,9 @@ export default function TripDetails() {
     const year = date.getFullYear();
     return `${month}/${day}/${year}`;
   };
-
+  const handleUpdate = (id: any) => {
+    router.push(`/trips/${id}/edit`);
+  };
   return (
     <div className="container mx-auto py-8">
       <>
@@ -119,6 +120,14 @@ export default function TripDetails() {
       <p className="text-gray-600 mb-8">
         {trip?.city} | {formatDate(trip?.start_date)} -{" "}
         {formatDate(trip?.end_date)}
+        <button
+          onClick={() => {
+            handleUpdate(trip.id);
+          }}
+          className="bg-blue-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
+        >
+          Edit
+        </button>
       </p>
       <div className="grid grid-cols-7 gap-4">
         {allDays

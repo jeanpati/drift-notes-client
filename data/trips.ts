@@ -37,8 +37,8 @@ export function getAllTrips() {
   });
 }
 
-export function updateTrip(tripId: number, trip: Trip) {
-  return fetchWithResponse(`trips/${tripId}`, {
+export function updateTrip(trip: Trip) {
+  return fetchWithResponse(`trips/${trip.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

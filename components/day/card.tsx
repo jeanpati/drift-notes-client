@@ -63,8 +63,8 @@ export function DayColumn({ day }: DayColumnProps) {
 
   const { mutateAsync: createEventMutation } = useMutation({
     mutationFn: createEvent,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["events"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["events"] });
       setShowModal(false);
     },
   });
