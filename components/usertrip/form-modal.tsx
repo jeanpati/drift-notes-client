@@ -69,19 +69,27 @@ export default function UserTripModal({
       : [];
 
   console.log(collaborators);
+
   return (
-    <>
-      <div>
-        <h2>Collaborators</h2>
-        <ul>
+    <div className="bg-green-100 rounded-lg p-8">
+      <h2 className="text-3xl font-bold mb-6 text-green-900">
+        Add Collaborator
+      </h2>
+      <div className="bg-white shadow-md rounded-lg p-6">
+        <h2 className="text-2xl font-semibold mb-4 text-green-800">
+          Collaborators
+        </h2>
+        <ul className="space-y-4">
           {collaborators.map((user: any) => (
-            <li key={user}>{user}</li>
+            <li key={user} className="text-xl text-green-700">
+              {user}
+            </li>
           ))}
         </ul>
       </div>
       {showModal && (
         <Modal showModal={showModal} setShowModal={setShowModal} title="">
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               id="username"
               label="Username"
@@ -91,13 +99,13 @@ export default function UserTripModal({
             />
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded-md"
+              className="bg-pink-500 text-white px-4 py-2 rounded-md text-lg hover:bg-pink-600 transition duration-300"
             >
               Add Collaborator
             </button>
           </form>
         </Modal>
       )}
-    </>
+    </div>
   );
 }

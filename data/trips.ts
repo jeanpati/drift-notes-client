@@ -38,7 +38,7 @@ export function getAllTrips() {
 }
 
 export function updateTrip(trip: Trip) {
-  return fetchWithResponse(`trips/${trip.id}`, {
+  return fetchWithoutResponse(`trips/${trip.id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",

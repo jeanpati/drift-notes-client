@@ -30,58 +30,51 @@ export default function Navbar(): JSX.Element {
 
   const getLoggedInButtons = () => {
     return (
-      <div className="navbar-item has-dropdown is-hoverable">
-        <a className="navbar-link">
-          <span className="icon">
-            <i className="fas fa-user-circle is-medium"></i>
-          </span>
-        </a>
-        <Link href="/dashboard" className="button is-light">
+      <div className="flex items-center">
+        <Link
+          href="/dashboard"
+          className="bg-emerald-900 text-emerald-100 px-4 py-2 rounded-md mr-2"
+        >
           Dashboard
         </Link>
-        <a onClick={handleLogout}>Log out</a>
+        <button
+          onClick={handleLogout}
+          className="bg-red-500 text-white px-4 py-2 rounded-md"
+        >
+          Log out
+        </button>
       </div>
     );
   };
 
   const getLoggedOutButtons = () => {
     return (
-      <div className="navbar-item">
-        <div className="buttons">
-          <Link href="/login" className="button is-light">
-            Log in
-          </Link>
-        </div>
+      <div>
+        <Link
+          href="/login"
+          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+        >
+          Log in
+        </Link>
       </div>
     );
   };
 
   return (
-    <nav
-      className="navbar mb-3 is-warning px-5 is-fixed-top is-top"
-      role="navigation"
-      aria-label="main navigation"
-    >
-      {/* <div className="navbar-brand">
-        <Link href="/">
-          <img
-            src="Logo"
-            alt="Logo"
-            style={{ width: "4rem", height: "4rem" }}
-            className="relative"
-          />
-        </Link>
-      </div> */}
-
-      <div className="navbar-menu" ref={navbar}>
-        <div className="navbar-start">
-          <Link href="/" className="navbar-item">
+    <nav className=" bg-gradient-to-r from-red-500 to-rose-300 text-white py-4 fixed w-full z-50">
+      <div className="container mx-auto flex justify-between items-center px-4">
+        <div className="flex items-center">
+          <Link
+            href="/"
+            className="mr-4 text-3xl bg-clip-text text-transparent bg-gradient-to-r from-stone-900 to-black hover:text-emerald-600"
+          >
             home
           </Link>
         </div>
-        <div className="navbar-end">
-          {isLoggedIn ? getLoggedInButtons() : getLoggedOutButtons()}
-        </div>
+        <h1 className="ml-40 text-8xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-800 to-green-600">
+          drift notes
+        </h1>
+        <div>{isLoggedIn ? getLoggedInButtons() : getLoggedOutButtons()}</div>
       </div>
     </nav>
   );

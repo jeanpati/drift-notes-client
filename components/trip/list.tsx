@@ -69,21 +69,24 @@ export default function TripList() {
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
-      <div className="px-4 py-5 sm:px-6">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
+      <div className="px-6 py-8 sm:px-8">
+        <h3 className="text-3xl leading-8 font-bold text-pink-600">
           Upcoming Trips
         </h3>
       </div>
       <ul className="divide-y divide-gray-200">
         {upcomingTrips.length === 0 ? (
-          <div className="px-4 py-5 sm:p-6">No upcoming trips</div>
+          <div className="px-6 py-8 sm:px-8 text-2xl">No upcoming trips</div>
         ) : (
           upcomingTrips.map((trip: TripData) => (
-            <div key={trip.id}>
-              <Link key={trip.id} href={`/trips/${trip.id}`}>
-                <li className="px-4 py-4 sm:px-6">
+            <div
+              key={trip.id}
+              className="bg-green-100 p-6 rounded-lg shadow-md mb-4"
+            >
+              <Link href={`/trips/${trip.id}`}>
+                <li className="px-6 py-6 sm:px-8">
                   <div className="flex items-center justify-between">
-                    <div className="text-sm font-medium text-indigo-600 truncate">
+                    <div className="text-wrap text-2xl font-bold text-green-800 truncate">
                       <>
                         {trip.title} - {trip.city} (
                         {formatDate(trip.start_date)} -{" "}
@@ -93,41 +96,46 @@ export default function TripList() {
                   </div>
                 </li>
               </Link>
-              <button
-                onClick={() => {
-                  handleDelete(trip.id);
-                }}
-                className="bg-red-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => {
-                  handleUpdate(trip.id);
-                }}
-                className="bg-blue-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
-              >
-                Edit
-              </button>
+              <div className="mt-4 space-x-4">
+                <button
+                  onClick={() => {
+                    handleDelete(trip.id);
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded text-lg"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    handleUpdate(trip.id);
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-lg"
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           ))
         )}
       </ul>
-      <div className="px-4 py-5 sm:px-6">
-        <h3 className="text-lg leading-6 font-medium text-gray-900">
+      <div className="px-6 py-8 sm:px-8">
+        <h3 className="text-3xl leading-8 font-bold text-pink-600">
           Past Trips
         </h3>
       </div>
       <ul className="divide-y divide-gray-200">
         {pastTrips.length === 0 ? (
-          <div className="px-4 py-5 sm:p-6">No past trips</div>
+          <div className="px-6 py-8 sm:px-8 text-2xl">No past trips</div>
         ) : (
           pastTrips.map((trip: TripData) => (
-            <div key={trip.id}>
+            <div
+              key={trip.id}
+              className="bg-green-100 p-6 rounded-lg shadow-md mb-4"
+            >
               <Link href={`/trips/${trip.id}`}>
-                <li className="px-4 py-4 sm:px-6">
+                <li className="px-6 py-6 sm:px-8">
                   <div className="flex items-center justify-between">
-                    <div className="text-sm font-medium text-indigo-600 truncate">
+                    <div className="text-wrap text-2xl font-bold text-green-800 truncate">
                       <>
                         {trip.title} - {trip.city} (
                         {formatDate(trip.start_date)} -{" "}
@@ -137,22 +145,24 @@ export default function TripList() {
                   </div>
                 </li>
               </Link>
-              <button
-                onClick={() => {
-                  handleDelete(trip.id);
-                }}
-                className="bg-red-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
-              >
-                Delete
-              </button>
-              <button
-                onClick={() => {
-                  handleUpdate(trip.id);
-                }}
-                className="bg-blue-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
-              >
-                Edit
-              </button>
+              <div className="mt-4 space-x-4">
+                <button
+                  onClick={() => {
+                    handleDelete(trip.id);
+                  }}
+                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded text-lg"
+                >
+                  Delete
+                </button>
+                <button
+                  onClick={() => {
+                    handleUpdate(trip.id);
+                  }}
+                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-lg"
+                >
+                  Edit
+                </button>
+              </div>
             </div>
           ))
         )}

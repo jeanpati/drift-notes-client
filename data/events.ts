@@ -49,7 +49,7 @@ export function updateEvent(event: Event): Promise<Event> {
   });
 }
 
-export function deleteEvent(eventId: string) {
+export function deleteEvent(eventId: number) {
   return fetchWithoutResponse(`events/${eventId}`, {
     method: "DELETE",
     headers: {

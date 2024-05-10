@@ -45,10 +45,15 @@ export default function Register() {
   };
 
   return (
-    <div className="columns is-centered">
-      <div className="column is-half">
-        <form className="box" onSubmit={submit}>
-          <h1 className="title">Welcome!</h1>
+    <div className="min-h-screen bg-green-900 flex items-center justify-center">
+      <div className="max-w-md w-full">
+        <form
+          className="bg-rose-100 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          onSubmit={submit}
+        >
+          <h1 className="text-3xl font-bold mb-6 text-center text-green-900">
+            Welcome!
+          </h1>
           <Input
             id="firstName"
             refEl={firstName}
@@ -56,7 +61,6 @@ export default function Register() {
             label="First Name"
           />
           <Input id="lastName" refEl={lastName} type="text" label="Last Name" />
-
           <Input id="email" refEl={email} type="text" label="Email" />
           <Input id="username" refEl={username} type="text" label="Username" />
           <Input
@@ -65,25 +69,24 @@ export default function Register() {
             type="password"
             label="Password"
           />
-
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button is-link" type="submit">
-                Submit
+          <div className="flex items-center justify-between">
+            <button
+              className="mt-5 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Submit
+            </button>
+            <Link href="/login">
+              <button className="mt-5 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Cancel
               </button>
-            </div>
-            <div className="control">
-              <Link href="/login">
-                <button className="button is-link is-light">Cancel</button>
-              </Link>
-            </div>
+            </Link>
           </div>
         </form>
       </div>
     </div>
   );
 }
-
 Register.getLayout = function getLayout(page: JSX.Element) {
   return (
     <Layout>

@@ -75,22 +75,18 @@ export default function CreateTripForm() {
   return (
     <>
       <button
-        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+        className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-lg text-xl"
         onClick={() => setShowModal(true)}
       >
         Create a Trip
       </button>
       {showModal && (
-        <Modal
-          showModal={showModal}
-          setShowModal={setShowModal}
-          title="Create a Trip"
-        >
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <Modal showModal={showModal} setShowModal={setShowModal} title="">
+          <form onSubmit={handleSubmit} className="space-y-6">
             <div>
               <label
                 htmlFor="title"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-lg font-medium text-emerald-900"
               >
                 Title
               </label>
@@ -99,18 +95,17 @@ export default function CreateTripForm() {
                   type="text"
                   name="title"
                   id="title"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
                   placeholder="Trip Title"
                   value={formData.title}
                   onChange={(e) => handleChange("title", e.target.value)}
                 />
               </div>
             </div>
-
             <div>
               <label
                 htmlFor="city"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-lg font-medium text-emerald-900"
               >
                 City
               </label>
@@ -119,7 +114,7 @@ export default function CreateTripForm() {
                   type="text"
                   name="city"
                   id="city"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
                   placeholder="City"
                   value={formData.city}
                   onChange={(e) => handleChange("city", e.target.value)}
@@ -129,7 +124,7 @@ export default function CreateTripForm() {
             <div>
               <label
                 htmlFor="start_date"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-lg font-medium text-emerald-900"
               >
                 Start Date
               </label>
@@ -138,14 +133,14 @@ export default function CreateTripForm() {
                   selected={formData.start_date}
                   onChange={(date) => handleChange("start_date", date)}
                   dateFormat="MM/dd/yyyy"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
                 />
               </div>
             </div>
             <div>
               <label
                 htmlFor="end_date"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-lg font-medium text-emerald-900"
               >
                 End Date
               </label>
@@ -154,15 +149,14 @@ export default function CreateTripForm() {
                   selected={formData.end_date}
                   onChange={(date) => handleChange("end_date", date)}
                   dateFormat="MM/dd/yyyy"
-                  className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                  className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
                 />
               </div>
             </div>
-
             <div className="flex justify-end">
               <button
                 type="submit"
-                className="ml-3 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                className="ml-3 inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
                 disabled={isPending}
               >
                 {isPending ? "Creating your trip..." : "Create"}

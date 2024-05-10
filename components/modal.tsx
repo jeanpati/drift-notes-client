@@ -24,14 +24,16 @@ export default function Modal({
         setShowModal(false);
       }
     }
-
     if (showModal) {
+      document.body.style.overflow = "hidden";
       document.addEventListener("mousedown", handleClickOutside);
     } else {
+      document.body.style.overflow = "auto";
       document.removeEventListener("mousedown", handleClickOutside);
     }
 
     return () => {
+      document.body.style.overflow = "auto";
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [showModal, setShowModal]);

@@ -97,49 +97,57 @@ export default function TripDetails() {
   const handleUpdate = (id: any) => {
     router.push(`/trips/${id}/edit`);
   };
+
   return (
-    <div className="container mx-auto py-8">
-      <>
-        <button
-          className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-          onClick={() => setShowModal(true)}
-        >
-          Add Users
-        </button>
-
-        {showModal && (
-          <UserTripModal
-            showModal={showModal}
-            setShowModal={setShowModal}
-            tripId={Number(id)}
-          />
-        )}
-      </>
-
-      <h1 className="text-3xl font-bold mb-4">{trip?.title}</h1>
-      <p className="text-gray-600 mb-8">
-        {trip?.city} | {formatDate(trip?.start_date)} -{" "}
-        {formatDate(trip?.end_date)}
+    <div className="min-h-screen bg-green-900 flex items-center justify-center pt-40">
+      <div className="container mx-auto py-8">
+        <div className="flex justify-end mb-8">
+          <button
+            className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-lg text-xl mr-4"
+            onClick={() => setShowModal(true)}
+          >
+            +Users
+          </button>
+          {showModal && (
+            <UserTripModal
+              showModal={showModal}
+              setShowModal={setShowModal}
+              tripId={Number(id)}
+            />
+          )}
+        </div>
+        <h1 className="text-5xl font-bold mb-6 text-white ml-10">
+          {trip?.title}
+        </h1>
+        <p className="text-2xl text-green-200 mb-10 ml-10">
+          {trip?.city} | {formatDate(trip?.start_date)} -{" "}
+          {formatDate(trip?.end_date)}
+        </p>
         <button
           onClick={() => {
             handleUpdate(trip.id);
           }}
-          className="bg-blue-500 hover:bg-purple-500 text-white font-bold py-2 px-4 rounded"
+          className="ml-10 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-xl mb-8"
         >
           Edit
         </button>
-      </p>
-      <div className="grid grid-cols-7 gap-4">
-        {allDays
-          ?.filter((day) => day.trip?.id === Number(id))
-          .map((day: Day) => (
-            <DayColumn key={day.id} day={day} />
-          ))}
+        <div className="overflow-x-auto">
+          <div className="flex space-x-6">
+            {allDays
+              ?.filter((day) => day.trip?.id === Number(id))
+              .sort(
+                (a, b) =>
+                  new Date(a.date).getTime() - new Date(b.date).getTime()
+              )
+              .map((day: Day) => (
+                <DayColumn key={day.id} day={day} />
+              ))}
+          </div>
+        </div>
       </div>
     </div>
   );
 }
-
 TripDetails.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <Layout>

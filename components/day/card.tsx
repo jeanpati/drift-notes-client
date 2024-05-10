@@ -2,8 +2,8 @@ import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import React from "react";
 import { useState } from "react";
 import { Trip } from "../../data/trips";
-import { getDayById } from "../../data/days"; // Importing getDayById function
-import { getAllEvents, Event, createEvent } from "../../data/events"; // Importing getAllEvents and updateEvent functions
+import { getDayById } from "../../data/days";
+import { getAllEvents, Event, createEvent } from "../../data/events";
 import { EventCard } from "../event/card";
 import { getAllCategories } from "../../data/categories";
 import EventModal from "../event/form-modal";
@@ -22,17 +22,19 @@ export interface Category {
 export interface DayColumnProps {
   day: Day;
 }
-export function DayCarousel({ days }: any) {
-  return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-      {days.map((day: any) => (
-        <div key={day.id} className="bg-white rounded-lg shadow-md">
-          <DayColumn day={day} />
-        </div>
-      ))}
-    </div>
-  );
-}
+
+const TimeSlots = () => {
+  const times = [];
+  for (let hour = 4; hour < 28; hour++) {
+    const time = hour > 23 ? `${hour - 24}:00` : `${hour}:00`;
+    times.push(
+      <div key={time} className="time-slot text-emerald-900 font-bold">
+        {time}
+      </div>
+    );
+  }
+  return <div className="time-column">{times}</div>;
+};
 
 export function DayColumn({ day }: DayColumnProps) {
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -44,7 +46,6 @@ export function DayColumn({ day }: DayColumnProps) {
     queryKey: ["day", day.id],
     queryFn: () => getDayById(day.id),
   });
-
   const {
     data: allEventsData,
     isLoading: isEventLoading,
@@ -53,14 +54,11 @@ export function DayColumn({ day }: DayColumnProps) {
     queryFn: getAllEvents,
     queryKey: ["events"],
   });
-
   const { data: categories } = useQuery({
     queryFn: getAllCategories,
     queryKey: ["categories"],
   });
-
   const queryClient = useQueryClient();
-
   const { mutateAsync: createEventMutation } = useMutation({
     mutationFn: createEvent,
     onSuccess: async () => {
@@ -68,110 +66,73 @@ export function DayColumn({ day }: DayColumnProps) {
       setShowModal(false);
     },
   });
-  //   const [isDragging, setIsDragging] = useState(false);
-  //   const [draggedEvent, setDraggedEvent] = useState<Event | null>(null);
-
-  //   const handleDragStart = (
-  //     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  //     tripEvent: Event
-  //   ) => {
-  //     setIsDragging(true);
-  //     setDraggedEvent(tripEvent);
-  //   };
-
-  //   const handleDragEnd = (
-  //     newDayId: number,
-  //     newStartTime: string,
-  //     newEndTime: string
-  //   ) => {
-  //     setIsDragging(false);
-
-  //     if (!draggedEvent) return; // Check if draggedEvent exists
-
-  //     updateEvent({
-  //       ...draggedEvent,
-  //       day: newDayId,
-  //       start_time: newStartTime,
-  //       end_time: newEndTime,
-  //     }).then(() => {
-  //       onEventDrop(draggedEvent, newDayId, newStartTime, newEndTime);
-  //     });
-  //   };
 
   if (isDayLoading || isEventLoading) return <div>Loading...</div>;
   if (isDayError || isEventError || !dayData || !allEventsData)
     return <div>Error fetching data</div>;
 
-  // const generateTimeSlots = () => {
-  //   const timeSlots = [];
-  //   for (let hour = 4; hour <= 27; hour++) {
-  //     const time = new Date(0, 0, 0, hour % 24)
-  //       .toLocaleTimeString("en-US", {
-  //         hour: "numeric",
-  //         hour12: true,
-  //       })
-  //       .toLowerCase();
-  //     timeSlots.push(time);
-  //   }
-  //   return timeSlots;
-  // };
-
-  // const timeSlots = generateTimeSlots();
-  // const getEventStartIndex = (startTime: string) => {
-  //   const [hours, minutes] = startTime.split(":").map((val) => parseInt(val));
-  //   return hours - 4 + minutes / 60;
-  // };
+  const eventsForDay = allEventsData
+    .filter(
+      (event) => event.day?.id === day.id && event.start_time && event.end_time
+    )
+    .sort((a, b) => {
+      if (a.start_time && b.start_time) {
+        return (
+          new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
+        );
+      }
+      return 0;
+    })
+    .map((event) => ({
+      ...event,
+      startHour: event.start_time ? new Date(event.start_time).getHours() : 0,
+      endHour: event.end_time ? new Date(event.end_time).getHours() : 0,
+    }));
 
   return (
-    <div className="border rounded-lg p-4 relative">
-      <h2 className="text-xl font-bold mb-2">
-        {new Date(day.date).toLocaleDateString()}
+    <div className="bg-green-200 day-column border border-solid border-green-900 rounded-2xl w-1/4 min-w-96 p-4">
+      <h2 className="text-2xl font-bold mb-4 text-green-900">
+        {day.date ? new Date(day.date).toLocaleDateString() : ""}
       </h2>
-      <>
+      <div className="mb-4">
         <button
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="bg-pink-500 text-white px-4 py-2 rounded-md text-lg"
           onClick={() => setShowModal(true)}
         >
           Create Event
         </button>
-
         {showModal && (
           <EventModal
             showModal={showModal}
             setShowModal={setShowModal}
             dayId={day.id}
             createEventMutation={createEventMutation}
-            categories={categories || []} // Pass the categories data or an empty array
+            categories={categories || []}
           />
         )}
-      </>
-
-      {/* <div className="grid grid-cols-4 gap-2 relative">
-        {timeSlots.map((timeSlot, index) => (
-          <React.Fragment key={index}>
-            <div
-              className="absolute left-0 w-20"
-              style={{ top: `${index * 40}px`, zIndex: 1 }}
-            >
-              {timeSlot}
-            </div>
-          </React.Fragment>
-        ))} */}
-      <div className="grid grid-cols-1 col-span-4 overflow-x-auto relative">
-        {allEventsData
-          .filter((event) => event.day?.id === day.id)
-          .map((event) => (
+      </div>
+      <div className="day-grid">
+        <div className="time-column">
+          <TimeSlots />
+        </div>
+        <div className="event-column grid grid-cols-1 gap-4 relative">
+          {eventsForDay.map((event) => (
             <EventCard
               key={event.id}
               event={event}
-              onDragStart={(e, eventData) => {
-                // drag start logic here
-              }}
-              isDragging={false}
+              startTime={event.start_time}
+              endTime={event.end_time}
+              style={
+                {
+                  "--start-hour": event.startHour,
+                  "--end-hour": event.endHour,
+                  className: "event-card",
+                } as React.CSSProperties
+              }
             />
           ))}
+        </div>
       </div>
     </div>
-    // </div>
   );
 }

@@ -29,10 +29,16 @@ export default function Login() {
   };
 
   return (
-    <div className="columns is-centered">
-      <div className="column is-half">
-        <form className="box" onSubmit={submit}>
-          <h1 className="title">Welcome Back!</h1>
+    <div className="min-h-screen bg-green-900 flex items-center justify-center">
+      <div className="max-w-md w-full">
+        <form
+          className="bg-rose-100 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          onSubmit={submit}
+        >
+          <h1 className="text-3xl font-bold mb-6 text-center text-green-900">
+            Welcome Back!
+          </h1>
+
           <Input id="username" refEl={username} type="text" label="Username" />
           <Input
             id="password"
@@ -40,17 +46,19 @@ export default function Login() {
             type="password"
             label="Password"
           />
-          <div className="field is-grouped">
-            <div className="control">
-              <button className="button is-link" type="submit">
-                Login
+
+          <div className="flex items-center justify-between">
+            <button
+              className=" mt-5 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >
+              Login
+            </button>
+            <Link href="/register">
+              <button className="mt-5 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Register
               </button>
-            </div>
-            <div className="control">
-              <Link href="/register">
-                <button className="button is-link is-light">Register</button>
-              </Link>
-            </div>
+            </Link>
           </div>
         </form>
       </div>

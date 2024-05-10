@@ -1,19 +1,17 @@
 import React from "react";
-import { Event } from "../../data/events";
+import { Event, deleteEvent } from "../../data/events";
 import { Category } from "../day/card";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getCategoryById } from "../../data/categories";
 
 interface EventProps {
   event: Event;
-  onDragStart: (
-    event: React.DragEvent<HTMLDivElement>,
-    eventData: Event
-  ) => void;
-  isDragging: boolean;
+  startTime?: string;
+  endTime?: string;
+  style?: React.CSSProperties;
 }
 
-export function EventCard({ event, onDragStart, isDragging }: EventProps) {
+export function EventCard({ event, startTime, endTime, style }: EventProps) {
   const categoryId = event.category?.id;
   const {
     data: category,
@@ -21,32 +19,70 @@ export function EventCard({ event, onDragStart, isDragging }: EventProps) {
     error: categoryError,
   } = useQuery<Category>({
     queryKey: ["category", categoryId],
-    queryFn: () => categoryId && getCategoryById(Number(categoryId)),
+    queryFn: () => getCategoryById(Number(categoryId)),
     enabled: !!categoryId,
   });
+  console.log(category);
+  const startDate = new Date(`2000-01-01T${startTime}`);
+  const endDate = new Date(`2000-01-01T${endTime}`);
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>) => {
-    onDragStart(e, event);
+  const startHour = startDate.getHours();
+  const endHour = endDate.getHours();
+  const startMinute = startDate.getMinutes();
+  const endMinute = endDate.getMinutes();
+
+  const handleDelete = async (eventId: number) => {
+    await deleteEventMutation(eventId);
   };
+
+  const queryClient = useQueryClient();
+
+  const { mutateAsync: deleteEventMutation } = useMutation({
+    mutationFn: deleteEvent,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["events"] });
+    },
+    onError: (error: any) => {
+      console.error("Error deleting event:", error);
+    },
+  });
 
   return (
     <div
-      className={`bg-blue-200 text-blue-800 p-2 rounded-md mb-2 ${
-        isDragging ? "opacity-50 cursor-move" : ""
-      }`}
-      onDragStart={handleDragStart}
-      draggable
+      className="event-card bg-pink-200 text-green-900 rounded-md px-4 py-2 overflow-y-auto"
+      style={{
+        ...style,
+        top: `calc(${(startHour - 4) * 40}px + ${(startMinute / 60) * 40}px)`,
+        height: `calc(${(endHour - startHour) * 40}px + ${
+          ((endMinute - startMinute) / 60) * 40
+        }px)`,
+      }}
     >
-      <h3 className="text-lg font-semibold mb-2">{event.title}</h3>
-      {event.location && (
-        <p className="text-sm text-gray-600 mb-2">Location:{event.location}</p>
-      )}
-      <p className="text-sm text-gray-600">
-        {event.start_time} - {event.end_time}
+      <h3 className="text-xl font-bold mb-2">{event.title}</h3>
+
+      <p className="text-lg">
+        {startTime} - {endTime}
       </p>
-      {category && (
-        <p className="text-sm text-gray-600 mb-2">{category.name}</p>
-      )}
+      <div>
+        {event.location && (
+          <p className="text-base text-green-800 mb-2">
+            Location: {event.location}
+          </p>
+        )}
+        {category && (
+          <p className="text-base text-green-800 mb-2">{category.name}</p>
+        )}
+        <button
+          onClick={() => {
+            if (event.id !== undefined) {
+              handleDelete(event.id);
+            }
+          }}
+          className="bg-red-500 text-white px-3 py-1 rounded-md mt-2 text-sm"
+        >
+          Delete
+        </button>
+      </div>
     </div>
   );
 }

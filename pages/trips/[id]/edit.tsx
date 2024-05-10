@@ -1,26 +1,34 @@
 import Layout from "../../../components/layout";
 import Navbar from "../../../components/navbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Modal from "../../../components/modal";
 import { getTripById, Trip, updateTrip } from "../../../data/trips";
 import { getAllDays } from "../../../data/days";
-import { updateEvent, Event, getAllEvents } from "../../../data/events";
+import { Event, getAllEvents } from "../../../data/events";
 import { DayColumn, Day } from "../../../components/day/card";
-import UserTripModal from "../../../components/usertrip/form-modal";
 
 export default function EditTrip() {
   const queryClient = useQueryClient();
-  const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+  const [updatedData, setUpdatedData] = useState<Trip | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      setUpdatedData((prevData) => ({
+        ...prevData,
+        id: Number(id),
+      }));
+    }
+  }, [id]);
+
   const {
     data: trip,
     isLoading: isLoadingTrip,
     error: tripError,
-  } = useQuery<Trip>({
-    queryKey: ["trip"],
+  } = useQuery({
+    queryKey: ["trip", id],
     queryFn: () => getTripById(Number(id)),
     enabled: !!id,
   });
@@ -44,10 +52,12 @@ export default function EditTrip() {
     queryFn: getAllEvents,
   });
 
-  // Runs a function to update an event's data
-  const { mutateAsync: updateEventMutation } = useMutation({
-    mutationFn: updateEvent,
-  });
+  const handleChange = (field: string, value: any) => {
+    setUpdatedData((prevUpdatedData) => ({
+      ...prevUpdatedData,
+      [field]: value,
+    }));
+  };
 
   // Runs a function to update a trip's data
   const { mutateAsync: updateTripMutation } = useMutation({
@@ -56,17 +66,6 @@ export default function EditTrip() {
       queryClient.invalidateQueries({ queryKey: ["trip"] });
     },
   });
-
-  const [updatedData, setUpdatedData] = useState<Trip | null>(null);
-
-  // Function to handle form data changes
-  const handleChange = (field: string, value: any) => {
-    setUpdatedData((prevUpdatedData) => ({
-      ...prevUpdatedData,
-      [field]: value,
-    }));
-  };
-
   // Function to handle form submission
   const handleSubmit = async () => {
     try {
@@ -93,7 +92,6 @@ export default function EditTrip() {
   if (eventsError) {
     return <div>Error: {eventsError.message}</div>;
   }
-
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const month = date.getMonth() + 1;
@@ -103,61 +101,70 @@ export default function EditTrip() {
   };
 
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-4">Edit Trip</h1>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          Title
-        </label>
-        <input
-          type="text"
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-          value={updatedData?.title || ""}
-          onChange={(e) => handleChange("title", e.target.value)}
-        />
+    <div className="min-h-screen bg-green-900 flex items-center justify-center pt-40">
+      <div className="container mx-auto py-8 ml-10">
+        <h1 className="text-5xl font-bold mb-6 text-white ml-10">Edit Trip</h1>
+        <div className="mb-8">
+          <label className="block text-green-200 text-lg font-bold mb-2 ml-10">
+            Title
+          </label>
+          <input
+            type="text"
+            className="ml-10 shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-half text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
+            defaultValue={trip?.title || ""}
+            onChange={(e) => handleChange("title", e.target.value)}
+          />
+        </div>
+        <div className="mb-8 ml-10">
+          <label className="block text-green-200 text-lg font-bold mb-2">
+            City
+          </label>
+          <input
+            type="text"
+            className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-half text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
+            defaultValue={trip?.city || ""}
+            onChange={(e) => handleChange("city", e.target.value)}
+          />
+        </div>
+        <div className="mb-8 ml-10">
+          <label className="block text-green-200 text-lg font-bold mb-2">
+            Start Date
+          </label>
+          <input
+            type="date"
+            className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-half text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
+            defaultValue={trip?.start_date || ""}
+            onChange={(e) => handleChange("start_date", e.target.value)}
+          />
+        </div>
+        <div className="mb-8 ml-10">
+          <label className="block text-green-200 text-lg font-bold mb-2">
+            End Date
+          </label>
+          <input
+            type="date"
+            min={trip?.start_date}
+            className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-half text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
+            defaultValue={trip?.end_date || ""}
+            onChange={(e) => handleChange("end_date", e.target.value)}
+          />
+        </div>
+        <button
+          className="ml-10 bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-lg text-xl mb-8"
+          onClick={handleSubmit}
+        >
+          Save
+        </button>
+        <div className="overflow-x-auto">
+          <div className="flex space-x-6">
+            {allDays
+              ?.filter((day) => day.trip?.id === Number(id))
+              .map((day: Day) => (
+                <DayColumn key={day.id} day={day} />
+              ))}
+          </div>
+        </div>
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          City
-        </label>
-        <input
-          type="text"
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-          value={updatedData?.city || ""}
-          onChange={(e) => handleChange("city", e.target.value)}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          Start Date
-        </label>
-        <input
-          type="date"
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-          value={updatedData?.start_date || ""}
-          onChange={(e) => handleChange("start_date", e.target.value)}
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700 text-sm font-bold mb-2">
-          End Date
-        </label>
-        <input
-          type="date"
-          min={updatedData?.start_date}
-          className="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md"
-          value={updatedData?.end_date || ""}
-          onChange={(e) => handleChange("end_date", e.target.value)}
-        />
-      </div>
-      <button
-        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => {
-          handleSubmit;
-        }}
-      >
-        Save
-      </button>
     </div>
   );
 }
