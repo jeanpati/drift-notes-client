@@ -1,0 +1,113 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Replace <uniquifier> with a unique and descriptive class name */
+/* Replace <weight> with a value from 100 to 700 */
+.josefin-sans-medium {
+  font-family: "Josefin Sans", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+}
+
+:root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 250, 240, 230;
+  --background-end-rgb: 250, 240, 230;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+  font-family: "Josefin Sans", sans-serif;
+  font-weight: 500;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.day-grid {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 10px;
+}
+.day-column {
+  width: 25%;
+  padding: 1rem;
+  box-sizing: border-box;
+  max-width: 300px;
+}
+
+.day-column:last-child {
+  margin-right: 0;
+}
+
+.time-column {
+  display: grid;
+  grid-template-rows: repeat(24, 40px);
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 0.5rem;
+}
+.time-slot {
+  display: block;
+  height: 40px;
+  line-height: 40px;
+  margin-bottom: 0.25rem;
+}
+
+.time-slot span {
+  position: absolute;
+  left: -40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.dot {
+  width: 4px;
+  height: 4px;
+  background-color: #ccc;
+  border-radius: 50%;
+  margin-left: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin: 1rem;
+}
+
+.grid > * {
+  width: 100%;
+}
+
+.event-column {
+  position: relative;
+  min-height: 960px;
+}
+
+.event-card {
+  position: absolute;
+  width: calc(100% - 10px);
+  margin-right: 10px;
+}
