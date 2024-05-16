@@ -5,9 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
-    "lint": "next lint",
-    "export": "next export"
+    "start": "next start -p 8080",
+    "lint": "next lint"
   },
   "dependencies": {
     "@tanstack/react-query": "^5.32.1",
