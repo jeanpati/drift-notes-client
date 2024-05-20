@@ -34,13 +34,13 @@ export default function Navbar(): JSX.Element {
         <div className="flex">
           <Link
             href="/"
-            className="text-3xl text-black-900 hover:text-emerald-600 transition duration-75 hover:underline ml-5 mr-6 "
+            className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline ml-5 mr-6 "
           >
             home
           </Link>
           <Link
             href="/dashboard"
-            className="text-3xl text-black-900 hover:text-emerald-600 transition duration-75 hover:underline"
+            className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline"
           >
             dashboard
           </Link>
@@ -48,7 +48,7 @@ export default function Navbar(): JSX.Element {
         <div>
           <button
             onClick={handleLogout}
-            className="mr-5 text-3xl text-black-900 hover:text-red-500 transition duration-75 hover:underline"
+            className="mr-5 text-3xl text-black hover:text-red-500 transition duration-75 hover:underline"
           >
             log out
           </button>
@@ -62,13 +62,13 @@ export default function Navbar(): JSX.Element {
       <div>
         <Link
           href="/"
-          className="mr-4 text-3xl bg-clip-text text-transparent bg-gradient-to-r from-stone-900 to-black hover:text-emerald-600"
+          className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline ml-5 mr-6 "
         >
           home
         </Link>
         <Link
           href="/login"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline"
         >
           log in
         </Link>

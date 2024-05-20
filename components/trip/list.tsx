@@ -81,7 +81,7 @@ export default function TripList() {
           upcomingTrips.map((trip: TripData) => (
             <div
               key={trip.id}
-              className="bg-green-100 p-6 rounded-lg shadow-md mb-4"
+              className="bg-green-100 p-6 rounded-lg shadow-md mb-4 mx-2"
             >
               <Link href={`/trips/${trip.id}`}>
                 <li className="px-6 py-6 sm:px-8">
@@ -109,7 +109,7 @@ export default function TripList() {
                   onClick={() => {
                     handleUpdate(trip.id);
                   }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-lg"
+                  className="bg-blue-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded text-lg"
                 >
                   Edit
                 </button>

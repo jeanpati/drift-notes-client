@@ -45,10 +45,10 @@ export default function Register() {
   };
 
   return (
-    <div className="min-h-screen bg-green-900 flex items-center justify-center">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="max-w-md w-full">
         <form
-          className="bg-rose-100 shadow-md rounded px-8 pt-6 pb-8 mb-4"
+          className="outline outline-orange-500 shadow-md rounded px-8 pt-6 pb-8 mb-4"
           onSubmit={submit}
         >
           <h1 className="text-3xl font-bold mb-6 text-center text-green-900">
@@ -70,17 +70,17 @@ export default function Register() {
             label="Password"
           />
           <div className="flex items-center justify-between">
+            <Link href="/login">
+              <button className="mt-5 hover:underline text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                Cancel
+              </button>
+            </Link>
             <button
-              className="mt-5 bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="mt-5 outline outline-emerald-800 hover:bg-rose-100 text-orange-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
               Submit
             </button>
-            <Link href="/login">
-              <button className="mt-5 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Cancel
-              </button>
-            </Link>
           </div>
         </form>
       </div>

@@ -24,7 +24,7 @@ export function Input({
   children,
 }: InputProps) {
   return (
-    <div className={`field ${addlClass}`}>
+    <div className={`field ${addlClass} text-2xl`}>
       {label && <label className="label">{label}</label>}
       <div className="control">
         <input
