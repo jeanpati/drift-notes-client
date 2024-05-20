@@ -71,7 +71,7 @@ export default function Navbar(): JSX.Element {
             home
           </Link>
         </div>
-        <h1 className="ml-40 text-8xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-800 to-green-600">
+        <h1 className="ml-40 text-8xl bg-clip-text text-transparent bg-white">
           drift notes
         </h1>
         <div>{isLoggedIn ? getLoggedInButtons() : getLoggedOutButtons()}</div>
