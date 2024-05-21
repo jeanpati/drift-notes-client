@@ -88,15 +88,18 @@ export function DayColumn({ day }: DayColumnProps) {
       startHour: event.start_time ? new Date(event.start_time).getHours() : 0,
       endHour: event.end_time ? new Date(event.end_time).getHours() : 0,
     }));
-
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+    return `${month}/${day}/${year}`;
+  };
   return (
-    <div className="bg-green-200 day-column border border-solid border-green-900 rounded-2xl w-1/4 min-w-96 p-4">
+    <div className="bg-green-50 day-column border border-solid border-green-900 rounded-2xl w-1/4 min-w-96 p-4">
       <h2 className="text-2xl font-bold mb-4 text-green-900">
-        {day.date ? new Date(day.date).toLocaleDateString() : ""}
+        {day.date ? formatDate(day.date) : ""}
       </h2>
       <div className="mb-4">
         <button
-          className="bg-pink-500 text-white px-4 py-2 rounded-md text-lg"
+          className="flex outline outline-yellow-300 bg-yellow-50 hover:bg-rose-50 text-black font-bold py-2 px-4 rounded text-lg m-5 self-center"
           onClick={() => setShowModal(true)}
         >
           Create Event

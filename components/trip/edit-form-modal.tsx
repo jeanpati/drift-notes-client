@@ -74,7 +74,7 @@ export default function EditTripForm() {
   return (
     <>
       <button
-        className="outline outline-cyan-500 hover:bg-cyan-100 text-cyan-600 font-bold py-2 px-4 rounded text-sm m-5"
+        className="outline outline-cyan-500 hover:bg-cyan-100 text-cyan-600 font-bold py-2 px-4 rounded text-lg m-5"
         onClick={() => setShowModal(true)}
       >
         edit trip

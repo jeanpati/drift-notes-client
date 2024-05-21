@@ -147,7 +147,7 @@ export default function CreateTripForm() {
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="ml-3 inline-flex justify-center py-3 px-6 outline outline-emerald-900 shadow-sm text-lg font-medium rounded-md text-emerald-900 hover:bg-orange-500 hover:text-white"
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-xl"
                   disabled={isPending}
                 >
                   {isPending ? "Creating your trip..." : "Submit"}

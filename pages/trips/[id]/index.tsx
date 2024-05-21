@@ -2,9 +2,8 @@ import Layout from "../../../components/layout";
 import Navbar from "../../../components/navbar";
 import React, { useState } from "react";
 import { useRouter } from "next/router";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import Modal from "../../../components/modal";
-import { getTripById, Trip } from "../../../data/trips";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import { getTripById } from "../../../data/trips";
 import { getAllDays } from "../../../data/days";
 import { updateEvent, Event, getAllEvents } from "../../../data/events";
 import { DayColumn, Day } from "../../../components/day/card";
@@ -89,14 +88,8 @@ export default function TripDetails() {
     return <div>Error: {eventsError.message}</div>;
   }
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
+    const [year, month, day] = dateString.split("-");
     return `${month}/${day}/${year}`;
-  };
-  const handleUpdate = (id: any) => {
-    router.push(`/trips/${id}/edit`);
   };
 
   return (
@@ -107,10 +100,10 @@ export default function TripDetails() {
             <div className="md:flex-1 rounded-lg shadow-lg p-6 w-full">
               <div className="flex justify-end mb-8">
                 <button
-                  className="outline outline-amber-500 hover:bg-amber-50 text-amber-600 font-bold py-2 px-4 rounded text-sm m-5"
+                  className="outline outline-amber-500 hover:bg-amber-50 text-amber-600 font-bold py-2 px-4 rounded text-lg m-5"
                   onClick={() => setShowModal(true)}
                 >
-                  +Users
+                  +users
                 </button>
                 <UpdateTripForm />
                 {showModal && (
@@ -124,7 +117,7 @@ export default function TripDetails() {
               <h1 className="text-5xl font-bold mb-6 text-center text-orange-500">
                 {trip?.title}
               </h1>
-              <p className="text-2xl text-gray-600 mb-10 text-center">
+              <p className="text-2xl text-rose-400 mb-10 text-center">
                 {trip?.city} | {formatDate(trip?.start_date)} -{" "}
                 {formatDate(trip?.end_date)}
               </p>

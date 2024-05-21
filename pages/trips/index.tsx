@@ -6,7 +6,7 @@ export default function RedirectToDashboard() {
 
   useEffect(() => {
     router.replace("/dashboard");
-  }, []);
+  });
 
   return null;
 }
