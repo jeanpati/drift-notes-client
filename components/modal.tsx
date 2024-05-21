@@ -42,7 +42,7 @@ export default function Modal({
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div
         ref={modalRef}
-        className="outline outline-orange-500 bg-rose-100 rounded-lg shadow-lg p-6 w-full max-w-md"
+        className="outline outline-orange-500 bg-rose-100 rounded-lg shadow-lg p-6 w-full max-w-xl"
       >
         <header className="flex justify-end items-center border-b pb-3">
           <button

@@ -102,7 +102,7 @@ export function DayColumn({ day }: DayColumnProps) {
           className="flex outline outline-yellow-300 bg-yellow-50 hover:bg-rose-50 text-black font-bold py-2 px-4 rounded text-lg m-5 self-center"
           onClick={() => setShowModal(true)}
         >
-          Create Event
+          create event
         </button>
         {showModal && (
           <EventModal

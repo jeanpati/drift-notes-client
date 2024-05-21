@@ -25,13 +25,13 @@ export function Select({
   addlClass = "",
 }: SelectProps) {
   return (
-    <div className="field is-expanded">
-      {label ? <label className="label">{label}</label> : <></>}
-      <div className={`select ${addlClass} is-fullwidth`}>
-        <select id={id} ref={refEl}>
+    <div className="text-2xl">
+      {label && <label className="label">{label}</label>}
+      <div className="control">
+        <select id={id} ref={refEl} className="input p-1.5">
           <option value="0">{title}</option>
           {options.map((option) => (
-            <option key={option.id} value={option.id}>
+            <option key={option.id} value={option.id} className="">
               {option.name}
             </option>
           ))}

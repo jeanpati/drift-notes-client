@@ -112,7 +112,7 @@ export default function CreateTripForm() {
         className="bg-emerald-800 hover:bg-rose-200 text-white font-bold py-3 px-6 rounded-lg text-xl self-end"
         onClick={() => setShowModal(true)}
       >
-        Create A Trip
+        create a trip
       </button>
       {showModal && (
         <div className="">

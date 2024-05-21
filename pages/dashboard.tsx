@@ -11,8 +11,8 @@ export default function Dashboard() {
         <div className="py-6">
           <div className="flex flex-col md:flex-row gap-6">
             <div className=" md:flex-1 rounded-lg shadow-lg p-6 w-full">
-              <h2 className="text-5xl font-bold mb-4 text-center text-orange-500">
-                Trip List
+              <h2 className="text-7xl font-bold mb-4 text-center text-orange-500">
+                trip list
               </h2>
               <div className="flex-row mb-8 justify-items-end">
                 <CreateTripForm />

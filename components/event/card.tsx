@@ -13,16 +13,23 @@ interface EventProps {
 
 export function EventCard({ event, startTime, endTime, style }: EventProps) {
   const categoryId = event.category?.id;
-  const {
-    data: category,
-    isLoading: isLoadingCategory,
-    error: categoryError,
-  } = useQuery<Category>({
+  const { data: category } = useQuery<Category>({
     queryKey: ["category", categoryId],
     queryFn: () => getCategoryById(Number(categoryId)),
     enabled: !!categoryId,
   });
-  console.log(category);
+
+  const formatTime = (time: string | undefined): string => {
+    if (!time) return "";
+    const date = new Date(`2000-01-01T${time}`);
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    const ampm = hours >= 12 ? "pm" : "am";
+    const formattedHours = hours % 12 || 12;
+    const formattedMinutes = minutes.toString().padStart(2, "0");
+    return `${formattedHours}:${formattedMinutes}${ampm}`;
+  };
+
   const startDate = new Date(`2000-01-01T${startTime}`);
   const endDate = new Date(`2000-01-01T${endTime}`);
 
@@ -61,7 +68,7 @@ export function EventCard({ event, startTime, endTime, style }: EventProps) {
       <h3 className="text-xl font-bold mb-2">{event.title}</h3>
 
       <p className="text-lg">
-        {startTime} - {endTime}
+        {formatTime(startTime)} - {formatTime(endTime)}
       </p>
       <div>
         {event.location && (
