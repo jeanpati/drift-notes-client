@@ -9,6 +9,7 @@ import { getAllDays } from "../../../data/days";
 import { updateEvent, Event, getAllEvents } from "../../../data/events";
 import { DayColumn, Day } from "../../../components/day/card";
 import UserTripModal from "../../../components/usertrip/form-modal";
+import UpdateTripForm from "../../../components/trip/edit-form-modal";
 
 export default function TripDetails() {
   const [showModal, setShowModal] = useState(false);
@@ -106,11 +107,12 @@ export default function TripDetails() {
             <div className="md:flex-1 rounded-lg shadow-lg p-6 w-full">
               <div className="flex justify-end mb-8">
                 <button
-                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-xl mr-4"
+                  className="outline outline-amber-500 hover:bg-amber-50 text-amber-600 font-bold py-2 px-4 rounded text-sm m-5"
                   onClick={() => setShowModal(true)}
                 >
                   +Users
                 </button>
+                <UpdateTripForm />
                 {showModal && (
                   <UserTripModal
                     showModal={showModal}
@@ -126,16 +128,6 @@ export default function TripDetails() {
                 {trip?.city} | {formatDate(trip?.start_date)} -{" "}
                 {formatDate(trip?.end_date)}
               </p>
-              <div className="flex justify-center mb-8">
-                <button
-                  onClick={() => {
-                    handleUpdate(trip.id);
-                  }}
-                  className="outline outline-cyan-500 hover:bg-cyan-100 text-cyan-600 font-bold py-2 px-4 rounded text-lg"
-                >
-                  edit
-                </button>
-              </div>
               <div className="overflow-x-auto">
                 <div className="flex space-x-6">
                   {allDays

@@ -2,7 +2,7 @@ import React from "react";
 import Layout from "../components/layout";
 import Navbar from "../components/navbar";
 import TripList from "../components/trip/list";
-import CreateTripForm from "../components/trip/form-modal";
+import CreateTripForm from "../components/trip/create-form-modal";
 
 export default function Dashboard() {
   return (
