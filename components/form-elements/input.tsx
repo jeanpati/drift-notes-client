@@ -9,6 +9,7 @@ interface InputProps {
   label?: string;
   onChangeEvent?: React.ChangeEventHandler<HTMLInputElement>;
   addlClass?: string;
+  min?: string;
   children?: React.ReactNode;
 }
 

@@ -99,55 +99,64 @@ export default function TripDetails() {
   };
 
   return (
-    <div className="min-h-screen bg-green-900 flex items-center justify-center pt-40">
-      <div className="container mx-auto py-8">
-        <div className="flex justify-end mb-8">
-          <button
-            className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-6 rounded-lg text-xl mr-4"
-            onClick={() => setShowModal(true)}
-          >
-            +Users
-          </button>
-          {showModal && (
-            <UserTripModal
-              showModal={showModal}
-              setShowModal={setShowModal}
-              tripId={Number(id)}
-            />
-          )}
-        </div>
-        <h1 className="text-5xl font-bold mb-6 text-white ml-10">
-          {trip?.title}
-        </h1>
-        <p className="text-2xl text-green-200 mb-10 ml-10">
-          {trip?.city} | {formatDate(trip?.start_date)} -{" "}
-          {formatDate(trip?.end_date)}
-        </p>
-        <button
-          onClick={() => {
-            handleUpdate(trip.id);
-          }}
-          className="ml-10 bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 px-6 rounded-lg text-xl mb-8"
-        >
-          Edit
-        </button>
-        <div className="overflow-x-auto">
-          <div className="flex space-x-6">
-            {allDays
-              ?.filter((day) => day.trip?.id === Number(id))
-              .sort(
-                (a, b) =>
-                  new Date(a.date).getTime() - new Date(b.date).getTime()
-              )
-              .map((day: Day) => (
-                <DayColumn key={day.id} day={day} />
-              ))}
+    <div className="w-full flex flex-col min-h-screen items-center justify-between pt-40">
+      <div className="max-w-8xl w-full px-4 sm:px-6 lg:px-8">
+        <div className="py-6">
+          <div className="flex flex-col md:flex-row gap-6">
+            <div className="md:flex-1 rounded-lg shadow-lg p-6 w-full">
+              <div className="flex justify-end mb-8">
+                <button
+                  className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg text-xl mr-4"
+                  onClick={() => setShowModal(true)}
+                >
+                  +Users
+                </button>
+                {showModal && (
+                  <UserTripModal
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    tripId={Number(id)}
+                  />
+                )}
+              </div>
+              <h1 className="text-5xl font-bold mb-6 text-center text-orange-500">
+                {trip?.title}
+              </h1>
+              <p className="text-2xl text-gray-600 mb-10 text-center">
+                {trip?.city} | {formatDate(trip?.start_date)} -{" "}
+                {formatDate(trip?.end_date)}
+              </p>
+              <div className="flex justify-center mb-8">
+                <button
+                  onClick={() => {
+                    handleUpdate(trip.id);
+                  }}
+                  className="outline outline-cyan-500 hover:bg-cyan-100 text-cyan-600 font-bold py-2 px-4 rounded text-lg"
+                >
+                  edit
+                </button>
+              </div>
+              <div className="overflow-x-auto">
+                <div className="flex space-x-6">
+                  {allDays
+                    ?.filter((day) => day.trip?.id === Number(id))
+                    .sort(
+                      (a, b) =>
+                        new Date(a.date).getTime() - new Date(b.date).getTime()
+                    )
+                    .map((day: Day) => (
+                      <DayColumn key={day.id} day={day} />
+                    ))}
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
   );
 }
+
 TripDetails.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <Layout>
