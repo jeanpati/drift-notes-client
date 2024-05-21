@@ -61,6 +61,7 @@ export default function TripList() {
     window.confirm("Are you sure you want to delete this trip?");
     if (true) {
       await deleteTripMutation(tripId);
+      router.push("/dashboard");
     }
   };
 
@@ -82,7 +83,7 @@ export default function TripList() {
           upcomingTrips.map((trip: TripData) => (
             <div
               key={trip.id}
-              className="bg-green-100 p-6 rounded-lg shadow-md mb-4 mx-5"
+              className="bg-green-50 p-6 rounded-lg shadow-md mb-4 mx-5"
             >
               <Link href={`/trips/${trip.id}`}>
                 <li className="px-6 py-6 sm:px-8">
@@ -94,27 +95,27 @@ export default function TripList() {
                         {formatDate(trip.end_date)})
                       </>
                     </div>
+                    <div className="mt-4 space-x-4">
+                      <button
+                        onClick={() => {
+                          handleDelete(trip.id);
+                        }}
+                        className="outline outline-red-500 hover:bg-rose-100 text-red-500 font-bold py-2 px-4 rounded text-lg"
+                      >
+                        delete
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleUpdate(trip.id);
+                        }}
+                        className="outline outline-cyan-500 hover:bg-cyan-100 text-cyan-600 font-bold py-2 px-4 rounded text-lg"
+                      >
+                        edit
+                      </button>
+                    </div>
                   </div>
                 </li>
               </Link>
-              <div className="mt-4 space-x-4">
-                <button
-                  onClick={() => {
-                    handleDelete(trip.id);
-                  }}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => {
-                    handleUpdate(trip.id);
-                  }}
-                  className="bg-blue-500 hover:bg-emerald-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Edit
-                </button>
-              </div>
             </div>
           ))
         )}
@@ -131,39 +132,39 @@ export default function TripList() {
           pastTrips.map((trip: TripData) => (
             <div
               key={trip.id}
-              className="bg-green-100 p-6 rounded-lg shadow-md mb-4 mx-5"
+              className="bg-slate-100 p-6 rounded-lg shadow-md mb-4 mx-5"
             >
               <Link href={`/trips/${trip.id}`}>
                 <li className="px-6 py-6 sm:px-8">
                   <div className="flex items-center justify-between">
-                    <div className="text-wrap text-2xl font-bold text-green-800 truncate">
+                    <div className="text-wrap text-2xl font-bold text-slate-800 truncate">
                       <>
                         {trip.title} - {trip.city} (
                         {formatDate(trip.start_date)} -{" "}
                         {formatDate(trip.end_date)})
                       </>
                     </div>
+                    <div className="mt-4 space-x-4">
+                      <button
+                        onClick={() => {
+                          handleDelete(trip.id);
+                        }}
+                        className="outline outline-red-500 hover:bg-rose-100 text-red-500 font-bold py-2 px-4 rounded text-lg"
+                      >
+                        delete
+                      </button>
+                      <button
+                        onClick={() => {
+                          handleUpdate(trip.id);
+                        }}
+                        className="outline outline-cyan-500 hover:bg-cyan-100 text-cyan-600 font-bold py-2 px-4 rounded text-lg"
+                      >
+                        edit
+                      </button>
+                    </div>
                   </div>
                 </li>
               </Link>
-              <div className="mt-4 space-x-4">
-                <button
-                  onClick={() => {
-                    handleDelete(trip.id);
-                  }}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => {
-                    handleUpdate(trip.id);
-                  }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Edit
-                </button>
-              </div>
             </div>
           ))
         )}
