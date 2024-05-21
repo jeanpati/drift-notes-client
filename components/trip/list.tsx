@@ -45,12 +45,10 @@ export default function TripList() {
   if (isLoading) return <div>Loading...</div>;
 
   const today = new Date();
-  const upcomingTrips = trips.filter(
-    (trip: TripData) => new Date(trip.end_date) >= today
-  );
-  const pastTrips = trips.filter(
-    (trip: TripData) => new Date(trip.end_date) < today
-  );
+  const upcomingTrips =
+    trips?.filter((trip: TripData) => new Date(trip.end_date) >= today) || [];
+  const pastTrips =
+    trips?.filter((trip: TripData) => new Date(trip.end_date) < today) || [];
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -60,7 +58,10 @@ export default function TripList() {
     return `${month}/${day}/${year}`;
   };
   const handleDelete = async (tripId: number) => {
-    await deleteTripMutation(tripId);
+    window.confirm("Are you sure you want to delete this trip?");
+    if (true) {
+      await deleteTripMutation(tripId);
+    }
   };
 
   const handleUpdate = (id: any) => {
@@ -70,7 +71,7 @@ export default function TripList() {
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
       <div className="px-6 py-8 sm:px-8">
-        <h3 className="text-3xl leading-8 font-bold text-pink-600">
+        <h3 className="text-3xl leading-8 font-bold text-orange-500">
           Upcoming Trips
         </h3>
       </div>
@@ -81,7 +82,7 @@ export default function TripList() {
           upcomingTrips.map((trip: TripData) => (
             <div
               key={trip.id}
-              className="bg-green-100 p-6 rounded-lg shadow-md mb-4 mx-2"
+              className="bg-green-100 p-6 rounded-lg shadow-md mb-4 mx-5"
             >
               <Link href={`/trips/${trip.id}`}>
                 <li className="px-6 py-6 sm:px-8">
@@ -119,7 +120,7 @@ export default function TripList() {
         )}
       </ul>
       <div className="px-6 py-8 sm:px-8">
-        <h3 className="text-3xl leading-8 font-bold text-pink-600">
+        <h3 className="text-3xl leading-8 font-bold text-orange-600">
           Past Trips
         </h3>
       </div>
@@ -130,7 +131,7 @@ export default function TripList() {
           pastTrips.map((trip: TripData) => (
             <div
               key={trip.id}
-              className="bg-green-100 p-6 rounded-lg shadow-md mb-4"
+              className="bg-green-100 p-6 rounded-lg shadow-md mb-4 mx-5"
             >
               <Link href={`/trips/${trip.id}`}>
                 <li className="px-6 py-6 sm:px-8">

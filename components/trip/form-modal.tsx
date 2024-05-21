@@ -9,12 +9,37 @@ import Modal from "../modal";
 import { useRouter } from "next/router";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Input } from "../form-elements";
 
 export interface TripFormData {
   title: string;
   city: string;
   start_date: Date | null;
   end_date: Date | null;
+}
+
+interface DateInputProps {
+  id: string;
+  label: string;
+  selected: Date | null;
+  onChangeEvent: (date: Date | null) => void;
+}
+
+function DateInput({ id, label, selected, onChangeEvent }: DateInputProps) {
+  return (
+    <div className="field text-2xl">
+      <label className="label">{label}</label>
+      <div className="control">
+        <DatePicker
+          id={id}
+          selected={selected}
+          onChange={onChangeEvent}
+          dateFormat="MM/dd/yyyy"
+          className="input"
+        />
+      </div>
+    </div>
+  );
 }
 
 export default function CreateTripForm() {
@@ -62,6 +87,15 @@ export default function CreateTripForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (
+      !formData.title ||
+      !formData.city ||
+      !formData.start_date ||
+      !formData.end_date
+    ) {
+      alert("Please fill in all fields.");
+      return;
+    }
     createTripMutation(formData);
   };
 
@@ -84,80 +118,36 @@ export default function CreateTripForm() {
         <div className="">
           <Modal showModal={showModal} setShowModal={setShowModal} title="">
             <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label
-                  htmlFor="title"
-                  className="block text-lg font-medium text-emerald-900"
-                >
-                  Title
-                </label>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    name="title"
-                    id="title"
-                    className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
-                    placeholder="Trip Title"
-                    value={formData.title}
-                    onChange={(e) => handleChange("title", e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="city"
-                  className="block text-lg font-medium text-emerald-900"
-                >
-                  City
-                </label>
-                <div className="mt-1">
-                  <input
-                    type="text"
-                    name="city"
-                    id="city"
-                    className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
-                    placeholder="City"
-                    value={formData.city}
-                    onChange={(e) => handleChange("city", e.target.value)}
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="start_date"
-                  className="block text-lg font-medium text-emerald-900"
-                >
-                  Start Date
-                </label>
-                <div className="mt-1">
-                  <DatePicker
-                    selected={formData.start_date}
-                    onChange={(date) => handleChange("start_date", date)}
-                    dateFormat="MM/dd/yyyy"
-                    className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
-                  />
-                </div>
-              </div>
-              <div>
-                <label
-                  htmlFor="end_date"
-                  className="block text-lg font-medium text-emerald-900"
-                >
-                  End Date
-                </label>
-                <div className="mt-1">
-                  <DatePicker
-                    selected={formData.end_date}
-                    onChange={(date) => handleChange("end_date", date)}
-                    dateFormat="MM/dd/yyyy"
-                    className="shadow-sm focus:ring-pink-500 focus:border-pink-500 block w-full text-lg border-gray-300 rounded-md bg-green-100 text-green-900"
-                  />
-                </div>
-              </div>
+              <Input
+                id="title"
+                label="Title"
+                placeholder="Trip Title"
+                defaultValue={formData.title}
+                onChangeEvent={(e) => handleChange("title", e.target.value)}
+              />
+              <Input
+                id="city"
+                label="City"
+                placeholder="City"
+                defaultValue={formData.city}
+                onChangeEvent={(e) => handleChange("city", e.target.value)}
+              />
+              <DateInput
+                id="start_date"
+                label="Start Date"
+                selected={formData.start_date}
+                onChangeEvent={(date) => handleChange("start_date", date)}
+              />
+              <DateInput
+                id="end_date"
+                label="End Date"
+                selected={formData.end_date}
+                onChangeEvent={(date) => handleChange("end_date", date)}
+              />
               <div className="flex justify-end">
                 <button
                   type="submit"
-                  className="ml-3 inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-lg font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500"
+                  className="ml-3 inline-flex justify-center py-3 px-6 outline outline-emerald-900 shadow-sm text-lg font-medium rounded-md text-emerald-900 hover:bg-orange-500 hover:text-white"
                   disabled={isPending}
                 >
                   {isPending ? "Creating your trip..." : "Submit"}
