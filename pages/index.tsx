@@ -4,23 +4,22 @@ import { ReactNode } from "react";
 
 export default function Index() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen pt-40">
-      <h1 className="mr-40 text-8xl bg-clip-text text-transparent bg-gradient-to-r from-rose-300 to-rose-200 hover:animate-bounce">
-        Welcome to Drift Notes!
-      </h1>
-      <p className="mr-40 mb-28 text-rose-200 text-5xl ">
-        your travel notebook
-      </p>
-      <h1 className=" text-8xl bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-600 hover:animate-bounce">
-        Welcome to Drift Notes!
-      </h1>
-      <p className=" mb-28 text-blue-300 text-5xl ">your travel notebook</p>
-      <h1 className="ml-40 text-8xl bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-orange-500 hover:animate-bounce">
-        Welcome to Drift Notes!
-      </h1>
-      <p className="ml-40 mb-28 text-orange-300 text-5xl ">
-        your travel notebook
-      </p>
+    <div className="w-full pt-20 md:pt-40 bg-beige-100 min-h-screen flex items-center justify-center">
+      <div className="container mx-auto px-4 flex flex-col items-center">
+        <img
+          className="object-cover mb-8 max-w-full h-auto mx-auto"
+          src="/images/1.png"
+          alt="Cover Image"
+        />
+        <div className="text-center">
+          <h1 className="text-3xl md:text-6xl lg:text-8xl bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-orange-500 hover:animate-bounce mb-4">
+            welcome to your travel notebook!
+          </h1>
+          <p className="text-xl md:text-3xl lg:text-5xl text-orange-300 mb-12">
+            plan your days for worry-free trips
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

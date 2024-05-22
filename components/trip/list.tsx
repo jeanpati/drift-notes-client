@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteTrip, getAllTrips, getTripById } from "../../data/trips";
 import Link from "next/link";
-import { useAppContext } from "../../context/state";
-import { deleteUserTrip, getAllUserTrips } from "../../data/usertrips";
+
 import { useRouter } from "next/router";
 
 interface TripData {
@@ -44,125 +38,107 @@ export default function TripList() {
 
   if (isLoading) return <div>Loading...</div>;
 
-  const today = new Date();
-  const upcomingTrips = trips.filter(
-    (trip: TripData) => new Date(trip.end_date) >= today
-  );
-  const pastTrips = trips.filter(
-    (trip: TripData) => new Date(trip.end_date) < today
-  );
-
   const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
+    const [year, month, day] = dateString.split("-");
     return `${month}/${day}/${year}`;
   };
-  const handleDelete = async (tripId: number) => {
-    await deleteTripMutation(tripId);
-  };
 
-  const handleUpdate = (id: any) => {
-    router.push(`/trips/${id}/edit`);
+  const today = new Date();
+  const upcomingTrips =
+    trips?.filter((trip: TripData) => new Date(trip.end_date) >= today) || [];
+  const pastTrips =
+    trips?.filter((trip: TripData) => new Date(trip.end_date) < today) || [];
+
+  const handleDelete = async (tripId: number) => {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this trip?"
+    );
+    if (confirmed) {
+      await deleteTripMutation(tripId);
+      router.push("/dashboard");
+    }
   };
 
   return (
     <div className="bg-white shadow overflow-hidden sm:rounded-md">
       <div className="px-6 py-8 sm:px-8">
-        <h3 className="text-3xl leading-8 font-bold text-pink-600">
-          Upcoming Trips
+        <h3 className="text-3xl leading-8 font-bold text-orange-500">
+          upcoming trips
         </h3>
       </div>
       <ul className="divide-y divide-gray-200">
         {upcomingTrips.length === 0 ? (
-          <div className="px-6 py-8 sm:px-8 text-2xl">No upcoming trips</div>
+          <div className="px-6 py-8 sm:px-8 text-2xl">no upcoming trips</div>
         ) : (
           upcomingTrips.map((trip: TripData) => (
             <div
               key={trip.id}
-              className="bg-green-100 p-6 rounded-lg shadow-md mb-4"
+              className="bg-green-50 p-6 rounded-lg shadow-md mb-4 mx-5"
             >
-              <Link href={`/trips/${trip.id}`}>
-                <li className="px-6 py-6 sm:px-8">
-                  <div className="flex items-center justify-between">
-                    <div className="text-wrap text-2xl font-bold text-green-800 truncate">
+              <li className="px-6 py-6 sm:px-8">
+                <div className="flex items-center justify-between">
+                  <Link href={`/trips/${trip.id}`}>
+                    <div className="text-wrap text-2xl font-bold text-green-800 truncate hover:text-rose-300">
                       <>
                         {trip.title} - {trip.city} (
                         {formatDate(trip.start_date)} -{" "}
                         {formatDate(trip.end_date)})
                       </>
                     </div>
+                  </Link>
+                  <div className="mt-4 space-x-4">
+                    <button
+                      onClick={() => {
+                        handleDelete(trip.id);
+                      }}
+                      className="outline outline-red-500 hover:bg-rose-100 text-red-500 font-bold py-2 px-4 rounded text-lg"
+                    >
+                      delete
+                    </button>
                   </div>
-                </li>
-              </Link>
-              <div className="mt-4 space-x-4">
-                <button
-                  onClick={() => {
-                    handleDelete(trip.id);
-                  }}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => {
-                    handleUpdate(trip.id);
-                  }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Edit
-                </button>
-              </div>
+                </div>
+              </li>
             </div>
           ))
         )}
       </ul>
       <div className="px-6 py-8 sm:px-8">
-        <h3 className="text-3xl leading-8 font-bold text-pink-600">
-          Past Trips
+        <h3 className="text-3xl leading-8 font-bold text-orange-600">
+          past trips
         </h3>
       </div>
       <ul className="divide-y divide-gray-200">
         {pastTrips.length === 0 ? (
-          <div className="px-6 py-8 sm:px-8 text-2xl">No past trips</div>
+          <div className="px-6 py-8 sm:px-8 text-2xl">no past trips</div>
         ) : (
           pastTrips.map((trip: TripData) => (
             <div
               key={trip.id}
-              className="bg-green-100 p-6 rounded-lg shadow-md mb-4"
+              className="bg-slate-100 p-6 rounded-lg shadow-md mb-4 mx-5"
             >
-              <Link href={`/trips/${trip.id}`}>
-                <li className="px-6 py-6 sm:px-8">
-                  <div className="flex items-center justify-between">
-                    <div className="text-wrap text-2xl font-bold text-green-800 truncate">
+              <li className="px-6 py-6 sm:px-8">
+                <div className="flex items-center justify-between">
+                  <Link href={`/trips/${trip.id}`}>
+                    <div className="text-wrap text-2xl font-bold text-slate-800 truncate hover:text-slate-500">
                       <>
                         {trip.title} - {trip.city} (
                         {formatDate(trip.start_date)} -{" "}
                         {formatDate(trip.end_date)})
                       </>
                     </div>
+                  </Link>
+                  <div className="mt-4 space-x-4">
+                    <button
+                      onClick={() => {
+                        handleDelete(trip.id);
+                      }}
+                      className="outline outline-red-500 hover:bg-rose-100 text-red-500 font-bold py-2 px-4 rounded text-lg"
+                    >
+                      delete
+                    </button>
                   </div>
-                </li>
-              </Link>
-              <div className="mt-4 space-x-4">
-                <button
-                  onClick={() => {
-                    handleDelete(trip.id);
-                  }}
-                  className="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Delete
-                </button>
-                <button
-                  onClick={() => {
-                    handleUpdate(trip.id);
-                  }}
-                  className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-lg"
-                >
-                  Edit
-                </button>
-              </div>
+                </div>
+              </li>
             </div>
           ))
         )}

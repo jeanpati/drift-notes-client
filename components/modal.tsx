@@ -39,18 +39,22 @@ export default function Modal({
   }, [showModal, setShowModal]);
 
   return (
-    <div className={showModal ? "modal is-active" : "modal"} ref={modalRef}>
-      <div className="modal-background"></div>
-      <div className="modal-card">
-        <header className="modal-card-head">
-          <p className="modal-card-title">{title}</p>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+      <div
+        ref={modalRef}
+        className="outline outline-orange-500 bg-rose-100 rounded-lg shadow-lg p-6 w-full max-w-xl"
+      >
+        <header className="flex justify-end items-center border-b pb-3">
           <button
-            className="delete"
+            className="text-2xl text-black hover:text-red-500"
             aria-label="close"
             onClick={() => setShowModal(false)}
-          ></button>
+          >
+            close
+          </button>
+          <p className="text-xl font-semibold">{title}</p>
         </header>
-        <section className="modal-card-body">{children}</section>
+        <section className="mt-4">{children}</section>
       </div>
     </div>
   );

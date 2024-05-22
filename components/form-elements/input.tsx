@@ -9,6 +9,7 @@ interface InputProps {
   label?: string;
   onChangeEvent?: React.ChangeEventHandler<HTMLInputElement>;
   addlClass?: string;
+  min?: string;
   children?: React.ReactNode;
 }
 
@@ -24,7 +25,7 @@ export function Input({
   children,
 }: InputProps) {
   return (
-    <div className={`field ${addlClass}`}>
+    <div className={`field ${addlClass} text-2xl`}>
       {label && <label className="label">{label}</label>}
       <div className="control">
         <input

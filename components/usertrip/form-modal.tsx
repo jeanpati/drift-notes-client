@@ -50,6 +50,8 @@ export default function UserTripModal({
         trip: tripId,
       };
       await createUserTripMutation(newUserTrip);
+    } else {
+      window.alert("No user found");
     }
   };
 
@@ -68,27 +70,22 @@ export default function UserTripModal({
           .filter((username: any) => username)
       : [];
 
-  console.log(collaborators);
-
   return (
     <div className="bg-green-100 rounded-lg p-8">
-      <h2 className="text-3xl font-bold mb-6 text-green-900">
-        Add Collaborator
-      </h2>
-      <div className="bg-white shadow-md rounded-lg p-6">
-        <h2 className="text-2xl font-semibold mb-4 text-green-800">
-          Collaborators
-        </h2>
-        <ul className="space-y-4">
-          {collaborators.map((user: any) => (
-            <li key={user} className="text-xl text-green-700">
-              {user}
-            </li>
-          ))}
-        </ul>
-      </div>
       {showModal && (
         <Modal showModal={showModal} setShowModal={setShowModal} title="">
+          <div className="bg-white shadow-md rounded-lg p-6 m-5">
+            <h2 className="text-2xl font-semibold mb-4 text-green-800">
+              Collaborators
+            </h2>
+            <ul className="space-y-4">
+              {collaborators.map((user: any) => (
+                <li key={user} className="text-xl text-green-700">
+                  {user}
+                </li>
+              ))}
+            </ul>
+          </div>
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
               id="username"

@@ -1,6 +1,5 @@
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Trip } from "../../data/trips";
 import { getDayById } from "../../data/days";
 import { getAllEvents, Event, createEvent } from "../../data/events";
@@ -25,7 +24,7 @@ export interface DayColumnProps {
 
 const TimeSlots = () => {
   const times = [];
-  for (let hour = 4; hour < 28; hour++) {
+  for (let hour = 0; hour < 24; hour++) {
     const time = hour > 23 ? `${hour - 24}:00` : `${hour}:00`;
     times.push(
       <div key={time} className="time-slot text-emerald-900 font-bold">
@@ -75,31 +74,128 @@ export function DayColumn({ day }: DayColumnProps) {
     .filter(
       (event) => event.day?.id === day.id && event.start_time && event.end_time
     )
-    .sort((a, b) => {
-      if (a.start_time && b.start_time) {
-        return (
-          new Date(a.start_time).getTime() - new Date(b.start_time).getTime()
-        );
+    .sort(
+      (a, b) =>
+        new Date(a.start_time!).getTime() - new Date(b.start_time!).getTime()
+    );
+
+  // create groups to ensure events dont overlap with each other
+  // every event belongs in a group
+  const calculateOverlaps = (events: Event[]) => {
+    const groups: Event[][] = [];
+    const overlaps = new Map<
+      Event,
+      { overlappingIndex: number; totalOverlaps: number }
+    >();
+
+    events.forEach((event) => {
+      let placed = false;
+
+      for (const group of groups) {
+        if (!group.some((other) => isOverlapping(event, other))) {
+          group.push(event);
+          placed = true;
+          break;
+        }
       }
-      return 0;
-    })
-    .map((event) => ({
+
+      if (!placed) {
+        groups.push([event]);
+      }
+    });
+
+    groups.forEach((group) => {
+      group.forEach((event, index) => {
+        overlaps.set(event, {
+          overlappingIndex: index,
+          totalOverlaps: group.length,
+        });
+      });
+    });
+
+    return overlaps;
+  };
+
+  const isOverlapping = (event1: Event, event2: Event) => {
+    if (
+      !event1.start_time ||
+      !event1.end_time ||
+      !event2.start_time ||
+      !event2.end_time
+    ) {
+      return false;
+    }
+
+    const start1 = new Date(event1.start_time).getTime();
+    const end1 = new Date(event1.end_time).getTime();
+    const start2 = new Date(event2.start_time).getTime();
+    const end2 = new Date(event2.end_time).getTime();
+
+    return start1 < end2 && end1 > start2;
+  };
+
+  const overlapMap = calculateOverlaps(eventsForDay);
+
+  const eventGroups: Event[][] = [];
+  eventsForDay.forEach((event) => {
+    let placed = false;
+    for (const group of eventGroups) {
+      if (group.some((groupEvent) => isOverlapping(event, groupEvent))) {
+        group.push(event);
+        placed = true;
+        break;
+      }
+    }
+    if (!placed) {
+      eventGroups.push([event]);
+    }
+  });
+
+  const eventsWithPositions = eventGroups.flatMap((group) => {
+    const overlapMap = calculateOverlaps(group);
+    return group.map((event) => ({
       ...event,
-      startHour: event.start_time ? new Date(event.start_time).getHours() : 0,
-      endHour: event.end_time ? new Date(event.end_time).getHours() : 0,
+      overlappingIndex: overlapMap.get(event)?.overlappingIndex ?? 0,
+      totalOverlaps: overlapMap.get(event)?.totalOverlaps ?? 1,
     }));
+  });
+
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+    return `${month}/${day}/${year}`;
+  };
+
+  const eventsByTimeSlot = new Map<string, Event[]>();
+  eventsForDay.forEach((event) => {
+    const startTimeSlot = event.start_time?.substring(0, 2) || "";
+    if (!eventsByTimeSlot.has(startTimeSlot)) {
+      eventsByTimeSlot.set(startTimeSlot, []);
+    }
+    eventsByTimeSlot.get(startTimeSlot)?.push(event);
+  });
+
+  const eventsWithPositionsByTimeSlot: Map<string, Event[]> = new Map();
+  eventsByTimeSlot.forEach((events, timeSlot) => {
+    const overlapMap = calculateOverlaps(events);
+    const eventsWithPositions = events.map((event) => ({
+      ...event,
+      overlappingIndex: overlapMap.get(event)?.overlappingIndex ?? 0,
+      totalOverlaps: overlapMap.get(event)?.totalOverlaps ?? 1,
+    }));
+    eventsWithPositionsByTimeSlot.set(timeSlot, eventsWithPositions);
+  });
 
   return (
-    <div className="bg-green-200 day-column border border-solid border-green-900 rounded-2xl w-1/4 min-w-96 p-4">
+    <div className="bg-green-50 day-column border border-solid border-green-900 rounded-2xl w-1/4 min-w-96 p-4">
       <h2 className="text-2xl font-bold mb-4 text-green-900">
-        {day.date ? new Date(day.date).toLocaleDateString() : ""}
+        {day.date ? formatDate(day.date) : ""}
       </h2>
       <div className="mb-4">
         <button
-          className="bg-pink-500 text-white px-4 py-2 rounded-md text-lg"
+          className="flex outline outline-yellow-300 bg-yellow-50 hover:bg-rose-50 text-black font-bold py-2 px-4 rounded text-lg m-5 self-center"
           onClick={() => setShowModal(true)}
         >
-          Create Event
+          create event
         </button>
         {showModal && (
           <EventModal
@@ -108,6 +204,7 @@ export function DayColumn({ day }: DayColumnProps) {
             dayId={day.id}
             createEventMutation={createEventMutation}
             categories={categories || []}
+            eventsForDay={eventsWithPositions}
           />
         )}
       </div>
@@ -116,21 +213,22 @@ export function DayColumn({ day }: DayColumnProps) {
           <TimeSlots />
         </div>
         <div className="event-column grid grid-cols-1 gap-4 relative">
-          {eventsForDay.map((event) => (
-            <EventCard
-              key={event.id}
-              event={event}
-              startTime={event.start_time}
-              endTime={event.end_time}
-              style={
-                {
-                  "--start-hour": event.startHour,
-                  "--end-hour": event.endHour,
-                  className: "event-card",
-                } as React.CSSProperties
-              }
-            />
-          ))}
+          {Array.from(eventsWithPositionsByTimeSlot.entries()).map(
+            ([timeSlot, eventsWithPositions]) => (
+              <div key={timeSlot}>
+                {eventsWithPositions.map((event) => (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    startTime={event.start_time}
+                    endTime={event.end_time}
+                    overlappingIndex={event.overlappingIndex}
+                    totalOverlaps={event.totalOverlaps}
+                  />
+                ))}
+              </div>
+            )
+          )}
         </div>
       </div>
     </div>

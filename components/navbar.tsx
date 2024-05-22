@@ -30,19 +30,29 @@ export default function Navbar(): JSX.Element {
 
   const getLoggedInButtons = () => {
     return (
-      <div className="flex items-center">
-        <Link
-          href="/dashboard"
-          className="bg-emerald-900 text-emerald-100 px-4 py-2 rounded-md mr-2"
-        >
-          Dashboard
-        </Link>
-        <button
-          onClick={handleLogout}
-          className="bg-red-500 text-white px-4 py-2 rounded-md"
-        >
-          Log out
-        </button>
+      <div className="flex justify-between items-center">
+        <div className="flex">
+          <Link
+            href="/"
+            className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline ml-5 mr-6 "
+          >
+            home
+          </Link>
+          <Link
+            href="/dashboard"
+            className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline"
+          >
+            dashboard
+          </Link>
+        </div>
+        <div>
+          <button
+            onClick={handleLogout}
+            className="mr-5 text-3xl text-black hover:text-red-500 transition duration-75 hover:underline"
+          >
+            log out
+          </button>
+        </div>
       </div>
     );
   };
@@ -51,31 +61,29 @@ export default function Navbar(): JSX.Element {
     return (
       <div>
         <Link
-          href="/login"
-          className="bg-blue-500 text-white px-4 py-2 rounded-md"
+          href="/"
+          className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline ml-5 mr-6 "
         >
-          Log in
+          home
+        </Link>
+        <Link
+          href="/login"
+          className="text-3xl text-black hover:text-emerald-600 transition duration-75 hover:underline"
+        >
+          log in
         </Link>
       </div>
     );
   };
 
   return (
-    <nav className=" bg-gradient-to-r from-red-500 to-rose-300 text-white py-4 fixed w-full z-50">
-      <div className="container mx-auto flex justify-between items-center px-4">
-        <div className="flex items-center">
-          <Link
-            href="/"
-            className="mr-4 text-3xl bg-clip-text text-transparent bg-gradient-to-r from-stone-900 to-black hover:text-emerald-600"
-          >
-            home
-          </Link>
-        </div>
-        <h1 className="ml-40 text-8xl bg-clip-text text-transparent bg-gradient-to-r from-emerald-800 to-green-600">
-          drift notes
+    <nav className="text-emerald-900 py-1 fixed w-full">
+      <div className="m-3 container flex justify-between items-center px-1">
+        <h1 className="text-8xl bg-clip-text text-transparent bg-emerald-900">
+          drift notes.
         </h1>
-        <div>{isLoggedIn ? getLoggedInButtons() : getLoggedOutButtons()}</div>
       </div>
+      <div>{isLoggedIn ? getLoggedInButtons() : getLoggedOutButtons()}</div>
     </nav>
   );
 }
