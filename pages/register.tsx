@@ -52,34 +52,34 @@ export default function Register() {
           onSubmit={submit}
         >
           <h1 className="text-3xl font-bold mb-6 text-center text-green-900">
-            Welcome!
+            happy to have you!
           </h1>
           <Input
             id="firstName"
             refEl={firstName}
             type="text"
-            label="First Name"
+            label="first name"
           />
-          <Input id="lastName" refEl={lastName} type="text" label="Last Name" />
-          <Input id="email" refEl={email} type="text" label="Email" />
-          <Input id="username" refEl={username} type="text" label="Username" />
+          <Input id="lastName" refEl={lastName} type="text" label="last name" />
+          <Input id="email" refEl={email} type="text" label="email" />
+          <Input id="username" refEl={username} type="text" label="username" />
           <Input
             id="password"
             refEl={password}
             type="password"
-            label="Password"
+            label="password"
           />
           <div className="flex items-center justify-between">
             <Link href="/login">
               <button className="mt-5 hover:underline text-black font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
-                Cancel
+                cancel
               </button>
             </Link>
             <button
               className="mt-5 outline outline-emerald-800 hover:bg-rose-100 text-orange-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Submit
+              submit
             </button>
           </div>
         </form>
