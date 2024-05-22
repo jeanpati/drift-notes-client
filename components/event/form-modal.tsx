@@ -10,6 +10,7 @@ interface EventModalProps {
   dayId: number;
   createEventMutation: any;
   categories: any[];
+  eventsForDay?: any[] | null;
 }
 
 export default function EventModal({
@@ -18,6 +19,7 @@ export default function EventModal({
   dayId,
   createEventMutation,
   categories,
+  eventsForDay,
 }: EventModalProps) {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");

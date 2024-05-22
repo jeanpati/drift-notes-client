@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Event, deleteEvent } from "../../data/events";
 import { Category } from "../day/card";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -9,9 +9,19 @@ interface EventProps {
   startTime?: string;
   endTime?: string;
   style?: React.CSSProperties;
+  overlappingIndex?: number;
+  totalOverlaps?: number;
 }
 
-export function EventCard({ event, startTime, endTime, style }: EventProps) {
+export function EventCard({
+  event,
+  startTime,
+  endTime,
+  style,
+  overlappingIndex = 0,
+  totalOverlaps = 1,
+}: EventProps) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const categoryId = event.category?.id;
   const { data: category } = useQuery<Category>({
     queryKey: ["category", categoryId],
@@ -56,21 +66,38 @@ export function EventCard({ event, startTime, endTime, style }: EventProps) {
 
   return (
     <div
-      className="event-card bg-pink-200 text-green-900 rounded-md px-4 py-2 overflow-y-auto"
+      className={`event-card bg-rose-50 text-emerald-900 rounded-md px-4 py-2 absolute ${
+        isExpanded ? "z-10 h-auto" : "overflow-hidden"
+      }`}
       style={{
-        ...style,
-        top: `calc(${(startHour - 4) * 40}px + ${(startMinute / 60) * 40}px)`,
-        height: `calc(${(endHour - startHour) * 40}px + ${
-          ((endMinute - startMinute) / 60) * 40
-        }px)`,
+        top: `calc(${startHour * 40}px + ${(startMinute / 60) * 40}px)`,
+        height: isExpanded
+          ? "auto"
+          : `calc(${(endHour - startHour) * 40}px + ${
+              ((endMinute - startMinute) / 60) * 40
+            }px)`,
+        minHeight: "40px",
+        left: `${overlappingIndex * (100 / totalOverlaps)}%`,
+        width: `calc(${100 / totalOverlaps}% - 10px)`,
       }}
+      onClick={() => setIsExpanded(!isExpanded)}
     >
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          if (event.id !== undefined) {
+            handleDelete(event.id);
+          }
+        }}
+        className="text-slate-400 px-2 py-1 rounded-md text-xs absolute top-1 right-1 bg-opacity-80 hover:bg-red-500"
+      >
+        x
+      </button>
       <h3 className="text-xl font-bold mb-2">{event.title}</h3>
-
       <p className="text-lg">
         {formatTime(startTime)} - {formatTime(endTime)}
       </p>
-      <div>
+      <div className={`event-details ${isExpanded ? "block" : "hidden"}`}>
         {event.location && (
           <p className="text-base text-green-800 mb-2">
             Location: {event.location}
@@ -79,16 +106,6 @@ export function EventCard({ event, startTime, endTime, style }: EventProps) {
         {category && (
           <p className="text-base text-green-800 mb-2">{category.name}</p>
         )}
-        <button
-          onClick={() => {
-            if (event.id !== undefined) {
-              handleDelete(event.id);
-            }
-          }}
-          className="bg-red-500 text-white px-3 py-1 rounded-md mt-2 text-sm"
-        >
-          Delete
-        </button>
       </div>
     </div>
   );

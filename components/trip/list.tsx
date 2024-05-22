@@ -1,14 +1,8 @@
 import React from "react";
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { deleteTrip, getAllTrips, getTripById } from "../../data/trips";
 import Link from "next/link";
-import { useAppContext } from "../../context/state";
-import { deleteUserTrip, getAllUserTrips } from "../../data/usertrips";
+
 import { useRouter } from "next/router";
 
 interface TripData {
@@ -44,19 +38,17 @@ export default function TripList() {
 
   if (isLoading) return <div>Loading...</div>;
 
+  const formatDate = (dateString: string) => {
+    const [year, month, day] = dateString.split("-");
+    return `${month}/${day}/${year}`;
+  };
+
   const today = new Date();
   const upcomingTrips =
     trips?.filter((trip: TripData) => new Date(trip.end_date) >= today) || [];
   const pastTrips =
     trips?.filter((trip: TripData) => new Date(trip.end_date) < today) || [];
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-    return `${month}/${day}/${year}`;
-  };
   const handleDelete = async (tripId: number) => {
     const confirmed = window.confirm(
       "Are you sure you want to delete this trip?"
@@ -65,10 +57,6 @@ export default function TripList() {
       await deleteTripMutation(tripId);
       router.push("/dashboard");
     }
-  };
-
-  const handleUpdate = (id: any) => {
-    router.push(`/trips/${id}/edit`);
   };
 
   return (

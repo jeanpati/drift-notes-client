@@ -108,6 +108,6 @@ body {
 
 .event-card {
   position: absolute;
-  width: calc(100% - 10px);
   margin-right: 10px;
+  transition: width 0.2s ease-in-out, left 0.2s ease-in-out;
 }

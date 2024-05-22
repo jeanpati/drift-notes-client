@@ -9,6 +9,8 @@ export interface Event {
   start_time?: string;
   end_time?: string;
   category?: Category;
+  overlappingIndex?: number;
+  totalOverlaps?: number;
 }
 
 export function createEvent(event: Event): Promise<Event> {
