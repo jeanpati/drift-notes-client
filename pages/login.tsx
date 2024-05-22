@@ -36,15 +36,15 @@ export default function Login() {
           onSubmit={submit}
         >
           <h1 className="text-3xl font-bold mb-6 text-center text-green-900">
-            Welcome Back!
+            welcome back!
           </h1>
 
-          <Input id="username" refEl={username} type="text" label="Username" />
+          <Input id="username" refEl={username} type="text" label="username" />
           <Input
             id="password"
             refEl={password}
             type="password"
-            label="Password"
+            label="password"
           />
 
           <div className="flex items-center justify-between">
@@ -52,12 +52,12 @@ export default function Login() {
               className="mt-5 outline outline-emerald-800 hover:bg-rose-100 text-orange-500 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               type="submit"
             >
-              Login
+              login
             </button>
           </div>
           <Link href="/register">
             <button className="mt-8 hover:underline text-black font-bold rounded focus:outline-none focus:shadow-outline">
-              Register
+              register
             </button>
           </Link>
         </form>
