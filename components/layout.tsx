@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         <Head>
           <title>Drift Notes</title>
         </Head>
-        <main className="container">{children}</main>
+        <main>{children}</main>
       </>
     </AppWrapper>
   );
