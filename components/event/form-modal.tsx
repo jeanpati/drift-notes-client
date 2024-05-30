@@ -19,7 +19,6 @@ export default function EventModal({
   dayId,
   createEventMutation,
   categories,
-  eventsForDay,
 }: EventModalProps) {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
