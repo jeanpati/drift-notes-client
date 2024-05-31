@@ -79,7 +79,7 @@ export default function Navbar(): JSX.Element {
   return (
     <nav className="text-emerald-900 py-1 relative w-full">
       <div className="m-3 container flex justify-between items-center px-1">
-        <h1 className="text-8xl bg-clip-text text-transparent bg-emerald-900">
+        <h1 className="text-7xl bg-clip-text text-transparent bg-emerald-900 pt-5">
           drift notes.
         </h1>
       </div>
