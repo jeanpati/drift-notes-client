@@ -96,8 +96,6 @@ export function EventCard({
       <h3 className="text-xl font-bold mb-2">{event.title}</h3>
       <p className="text-lg">
         {formatTime(startTime)} - {formatTime(endTime)}
-      </p>
-      <div className={`event-details ${isExpanded ? "block" : "hidden"}`}>
         {event.location && (
           <p className="text-base text-green-800 mb-2">
             Location: {event.location}
@@ -106,7 +104,8 @@ export function EventCard({
         {category && (
           <p className="text-base text-green-800 mb-2">{category.name}</p>
         )}
-      </div>
+      </p>
+      <div className={`event-details ${isExpanded ? "block" : "hidden"}`}></div>
     </div>
   );
 }

@@ -8,7 +8,7 @@ interface Option {
 interface SelectProps {
   id: string;
   refEl?: React.RefObject<HTMLSelectElement>;
-  onChangeEvent?: React.ChangeEventHandler<HTMLSelectElement>;
+  onChangeEvent?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   options: Option[];
   title: string;
   label?: string;
@@ -21,14 +21,20 @@ export function Select({
   refEl,
   options,
   title,
-  label,
+  value,
+  onChangeEvent,
   addlClass = "",
 }: SelectProps) {
   return (
     <div className="text-2xl">
-      {label && <label className="label">{label}</label>}
       <div className="control">
-        <select id={id} ref={refEl} className="input p-1.5">
+        <select
+          id={id}
+          ref={refEl}
+          value={value}
+          onChange={onChangeEvent}
+          className="input p-1.5"
+        >
           <option value="0">{title}</option>
           {options.map((option) => (
             <option key={option.id} value={option.id} className="">

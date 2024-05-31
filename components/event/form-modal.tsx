@@ -19,7 +19,6 @@ export default function EventModal({
   dayId,
   createEventMutation,
   categories,
-  eventsForDay,
 }: EventModalProps) {
   const [title, setTitle] = useState("");
   const [location, setLocation] = useState("");
@@ -46,7 +45,7 @@ export default function EventModal({
       location,
       start_time: formatTime(startTime),
       end_time: formatTime(endTime),
-      category_id: category,
+      category,
     };
     await createEventMutation(newEvent);
   };
@@ -123,7 +122,9 @@ export default function EventModal({
                   }))}
                   title="Select Category"
                   value={category}
-                  onChangeEvent={(e) => setCategory(e.target.value)}
+                  onChangeEvent={(e) => {
+                    setCategory(e.target.value);
+                  }}
                   addlClass="text-green-900"
                 />
               </div>
