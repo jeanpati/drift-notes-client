@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:8000";
+const API_URL = "https://app.driftnotes.com";
 
 const checkError = (res: Response) => {
   if (!res.ok) {
