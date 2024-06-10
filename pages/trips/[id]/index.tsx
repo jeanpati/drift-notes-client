@@ -133,8 +133,8 @@ export default function TripDetails() {
                     .map((day: Day) => (
                       <DayColumn key={day.id} day={day} />
                     ))}
-                  <Map />
                 </div>
+                <Map />
               </div>
             </div>
           </div>
