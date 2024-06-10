@@ -9,6 +9,7 @@ import { updateEvent, Event, getAllEvents } from "../../../data/events";
 import { DayColumn, Day } from "../../../components/day/card";
 import UserTripModal from "../../../components/usertrip/form-modal";
 import UpdateTripForm from "../../../components/trip/edit-form-modal";
+import { Map } from "../../../components/trip/map";
 
 export default function TripDetails() {
   const [showModal, setShowModal] = useState(false);
@@ -132,6 +133,7 @@ export default function TripDetails() {
                     .map((day: Day) => (
                       <DayColumn key={day.id} day={day} />
                     ))}
+                  <Map />
                 </div>
               </div>
             </div>
