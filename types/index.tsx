@@ -1,4 +1,3 @@
 export interface LatLong {
-  lat: number;
-  lng: number;
+  coordinates: [number, number];
 }

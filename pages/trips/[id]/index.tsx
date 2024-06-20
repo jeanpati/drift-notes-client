@@ -1,6 +1,6 @@
 import Layout from "../../../components/layout";
 import Navbar from "../../../components/navbar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import { getTripById } from "../../../data/trips";
@@ -24,6 +24,21 @@ export default function TripDetails() {
     queryFn: () => getTripById(Number(id)),
     enabled: !!id,
   });
+  const [coordinates, setCoordinates] = useState<[number, number]>([0, 0]);
+
+  useEffect(() => {
+    const fetchCoordinates = async () => {
+      if (trip?.city) {
+        try {
+          setCoordinates([trip.latitude, trip.longitude]);
+        } catch (error) {
+          console.error("Error occurred while fetching coordinates:", error);
+        }
+      }
+    };
+
+    fetchCoordinates();
+  }, [trip?.city]);
 
   const {
     data: allDays,
@@ -134,7 +149,7 @@ export default function TripDetails() {
                       <DayColumn key={day.id} day={day} />
                     ))}
                 </div>
-                <Map />
+                <Map coordinates={coordinates} />
               </div>
             </div>
           </div>

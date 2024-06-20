@@ -17,7 +17,31 @@ export function Map(latlong: LatLong) {
   const mapRef = useRef<HTMLDivElement>(null);
   const placeAutoCompleteRef = useRef<HTMLInputElement>(null);
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (isLoaded) {
+      const mapOptions = {
+        center: {
+          lat: latlong.coordinates[0],
+          lng: latlong.coordinates[1],
+        },
+        zoom: 16,
+        mapId: "MY-MAP",
+      };
+      const gMap = new google.maps.Map(
+        mapRef.current as HTMLDivElement,
+        mapOptions
+      );
+    }
+  }, [isLoaded]);
+  return (
+    <div className="flex flex-col space-y-4">
+      {isLoaded ? (
+        <div style={{ height: "600px" }} ref={mapRef} />
+      ) : (
+        <p>Loading...</p>
+      )}
+    </div>
+  );
 
   // useEffect(() => {
   //   const initMap = async () => {
