@@ -64,6 +64,7 @@ export default function EventModal({
               addlClass="text-green-900"
             />
             <Input
+              ref={placeAutoComplete}
               id="location"
               label="Location"
               placeholder="Enter event location"
