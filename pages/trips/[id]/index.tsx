@@ -38,7 +38,7 @@ export default function TripDetails() {
     };
 
     fetchCoordinates();
-  }, [trip?.city]);
+  }, [trip?.city, trip?.latitude, trip?.longitude]);
 
   const {
     data: allDays,
