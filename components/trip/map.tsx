@@ -17,6 +17,9 @@ export function Map(latlong: LatLong) {
   });
   const mapRef = useRef<HTMLDivElement>(null);
   const placeAutoCompleteRef = useRef<HTMLInputElement>(null);
+  const [markers, setMarkers] = useState<
+    google.maps.marker.AdvancedMarkerElement[]
+  >([]);
 
   useEffect(() => {
     if (isLoaded) {
@@ -64,6 +67,12 @@ export function Map(latlong: LatLong) {
             gMap.setCenter(place.geometry.location);
             gMap.setZoom(16);
           }
+
+          const marker = new google.maps.marker.AdvancedMarkerElement({
+            position: place.geometry.location,
+            map: gMap,
+            title: place.name,
+          });
         }
       });
 
