@@ -60,16 +60,19 @@ export default function EventModal({
               label="Title"
               placeholder="Enter event title"
               defaultValue={title}
-              onChangeEvent={(e) => setTitle(e.target.value)}
+              onChangeEvent={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setTitle(e.target.value)
+              }
               addlClass="text-green-900"
             />
             <Input
-              ref={placeAutoComplete}
               id="location"
               label="Location"
               placeholder="Enter event location"
               defaultValue={location}
-              onChangeEvent={(e) => setLocation(e.target.value)}
+              onChangeEvent={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setLocation(e.target.value)
+              }
               addlClass="text-green-900"
             />
             <div className="flex space-x-4">
@@ -123,7 +126,7 @@ export default function EventModal({
                   }))}
                   title="Select Category"
                   value={category}
-                  onChangeEvent={(e) => {
+                  onChangeEvent={(e: React.ChangeEvent<HTMLSelectElement>) => {
                     setCategory(e.target.value);
                   }}
                   addlClass="text-green-900"

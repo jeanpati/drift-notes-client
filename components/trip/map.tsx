@@ -2,6 +2,7 @@ import { Library, Loader } from "@googlemaps/js-api-loader";
 import React, { useEffect, useRef, useState } from "react";
 import { LatLong } from "../../types";
 import { useJsApiLoader } from "@react-google-maps/api";
+import { Input } from "../form-elements";
 
 const libs: Library[] = ["core", "maps", "places", "marker"];
 
@@ -35,6 +36,7 @@ export function Map(latlong: LatLong) {
   }, [isLoaded]);
   return (
     <div className="flex flex-col space-y-4">
+      <Input id="autocomplete" ref={placeAutoCompleteRef} />
       {isLoaded ? (
         <div style={{ height: "600px" }} ref={mapRef} />
       ) : (

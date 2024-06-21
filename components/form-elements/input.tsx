@@ -1,29 +1,29 @@
-import React from "react";
+import React, { forwardRef } from "react";
 
 interface InputProps {
   id: string;
   type?: string;
   placeholder?: string;
   defaultValue?: string;
-  refEl?: React.RefObject<HTMLInputElement>;
   label?: string;
   onChangeEvent?: React.ChangeEventHandler<HTMLInputElement>;
   addlClass?: string;
   min?: string;
   children?: React.ReactNode;
 }
-
-export function Input({
-  id,
-  type = "text",
-  placeholder = "",
-  defaultValue = "",
-  refEl = undefined,
-  label = undefined,
-  onChangeEvent,
-  addlClass = "",
-  children,
-}: InputProps) {
+function Input(
+  {
+    id,
+    type = "text",
+    placeholder = "",
+    defaultValue = "",
+    label = undefined,
+    onChangeEvent,
+    addlClass = "",
+    children,
+  }: InputProps,
+  ref: React.Ref<HTMLInputElement>
+) {
   return (
     <div className={`field ${addlClass} text-2xl`}>
       {label && <label className="label">{label}</label>}
@@ -34,7 +34,7 @@ export function Input({
           className="input"
           type={type}
           defaultValue={defaultValue}
-          ref={refEl}
+          ref={ref}
           onChange={onChangeEvent}
         ></input>
       </div>
@@ -42,3 +42,5 @@ export function Input({
     </div>
   );
 }
+
+export default forwardRef(Input);
