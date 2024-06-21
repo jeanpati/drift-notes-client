@@ -28,10 +28,17 @@ export function Map(latlong: LatLong) {
         zoom: 16,
         mapId: "MY-MAP",
       };
+      //setup the map
       const gMap = new google.maps.Map(
         mapRef.current as HTMLDivElement,
         mapOptions
       );
+      //setup autocomplete
+      const gAutoComplete = new google.maps.places.Autocomplete(
+        placeAutoCompleteRef.current as HTMLInputElement
+      );
+      setAutoComplete(gAutoComplete);
+      setMap(gMap);
     }
   }, [isLoaded]);
   return (
