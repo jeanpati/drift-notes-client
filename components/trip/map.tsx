@@ -33,14 +33,44 @@ export function Map(latlong: LatLong) {
         mapRef.current as HTMLDivElement,
         mapOptions
       );
+
+      const cityBounds = new google.maps.LatLngBounds(
+        new google.maps.LatLng(
+          latlong.coordinates[0] - 0.5,
+          latlong.coordinates[1] - 0.5
+        ),
+        new google.maps.LatLng(
+          latlong.coordinates[0] + 0.5,
+          latlong.coordinates[1] + 0.5
+        )
+      );
+
       //setup autocomplete
       const gAutoComplete = new google.maps.places.Autocomplete(
-        placeAutoCompleteRef.current as HTMLInputElement
+        placeAutoCompleteRef.current as HTMLInputElement,
+        {
+          bounds: cityBounds,
+          strictBounds: true,
+          fields: ["formatted_address", "geometry", "name"],
+        }
       );
+
+      gAutoComplete.addListener("place_changed", () => {
+        const place = gAutoComplete.getPlace();
+        if (place.geometry) {
+          if (place.geometry.viewport) {
+            gMap.fitBounds(place.geometry.viewport);
+          } else if (place.geometry.location) {
+            gMap.setCenter(place.geometry.location);
+            gMap.setZoom(16);
+          }
+        }
+      });
+
       setAutoComplete(gAutoComplete);
       setMap(gMap);
     }
-  }, [isLoaded]);
+  }, [isLoaded, latlong]);
   return (
     <div className="flex flex-col space-y-4">
       <Input id="autocomplete" ref={placeAutoCompleteRef} />
