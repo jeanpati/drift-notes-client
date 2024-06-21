@@ -17,9 +17,9 @@ export function Map(latlong: LatLong) {
   });
   const mapRef = useRef<HTMLDivElement>(null);
   const placeAutoCompleteRef = useRef<HTMLInputElement>(null);
-  const [markers, setMarkers] = useState<
-    google.maps.marker.AdvancedMarkerElement[]
-  >([]);
+  const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
+    null
+  );
 
   useEffect(() => {
     if (isLoaded) {
@@ -72,6 +72,19 @@ export function Map(latlong: LatLong) {
             position: place.geometry.location,
             map: gMap,
             title: place.name,
+          });
+
+          const gInfoWindow = new google.maps.InfoWindow();
+          setInfoWindow(gInfoWindow);
+
+          marker.addListener("click", () => {
+            gInfoWindow.setContent(`
+              <div>
+                <h3>${place.name}</h3>
+                <p>${place.formatted_address}</p>
+              </div>
+            `);
+            gInfoWindow.open(gMap, marker);
           });
         }
       });
