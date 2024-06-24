@@ -4,6 +4,7 @@ import { LatLong } from "../../types";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { Input } from "../form-elements";
 import { useAppContext } from "../../context/state";
+import { Event } from "../../data/events";
 
 const libs: Library[] = ["core", "maps", "places", "marker"];
 

@@ -66,36 +66,6 @@ export default function TripDetails() {
     queryFn: getAllEvents,
   });
 
-  // Runs a function to update an event's data
-  const { mutateAsync: updateEventMutation } = useMutation({
-    mutationFn: updateEvent,
-  });
-
-  // Updates an event's day and times when dropping an event
-  const handleEventDrop = async (
-    event: Event,
-    newDayId: number,
-    newStartTime: string,
-    newEndTime: string
-  ) => {
-    if (event.id === undefined) {
-      throw new Error("Event ID is undefined");
-    }
-
-    const updatedEvent = {
-      ...event,
-      day_id: newDayId,
-      start_time: newStartTime,
-      end_time: newEndTime,
-    };
-
-    try {
-      await updateEventMutation(updatedEvent);
-    } catch (error) {
-      console.error("An error occurred while updating the event:", error);
-    }
-  };
-
   if (isLoadingTrip || isLoadingDays || isLoadingEvents) {
     return <div>Loading...</div>;
   }
@@ -156,7 +126,7 @@ export default function TripDetails() {
                       <DayColumn key={day.id} day={day} />
                     ))}
                 </div>
-                <Map />
+                <Map events={allEventsData || []} />
               </div>
             </div>
           </div>
