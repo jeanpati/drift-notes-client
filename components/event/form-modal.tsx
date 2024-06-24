@@ -1,8 +1,15 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import Modal from "../modal";
 import { Input, Select } from "../form-elements";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useAppContext } from "../../context/state";
 
 interface EventModalProps {
   showModal: boolean;
@@ -25,6 +32,39 @@ export default function EventModal({
   const [startTime, setStartTime] = useState(new Date());
   const [endTime, setEndTime] = useState(new Date());
   const [category, setCategory] = useState("");
+  const placeAutoCompleteRef = useRef<HTMLInputElement>(null);
+  const [autoComplete, setAutoComplete] =
+    useState<google.maps.places.Autocomplete | null>(null);
+  const { cityCoordinates } = useAppContext();
+
+  useEffect(() => {
+    const cityBounds = new google.maps.LatLngBounds(
+      new google.maps.LatLng(
+        cityCoordinates[0] - 0.5,
+        cityCoordinates[1] - 0.5
+      ),
+      new google.maps.LatLng(cityCoordinates[0] + 0.5, cityCoordinates[1] + 0.5)
+    );
+
+    if (placeAutoCompleteRef.current) {
+      const gAutoComplete = new google.maps.places.Autocomplete(
+        placeAutoCompleteRef.current,
+        {
+          fields: ["formatted_address", "name"],
+          bounds: cityBounds,
+        }
+      );
+
+      gAutoComplete.addListener("place_changed", () => {
+        const place = gAutoComplete.getPlace();
+        if (place.formatted_address) {
+          setLocation(place.formatted_address);
+        }
+      });
+
+      setAutoComplete(gAutoComplete);
+    }
+  }, [cityCoordinates]);
 
   const formatTime = (date: Date | null): string => {
     if (!date) return "";
@@ -69,10 +109,8 @@ export default function EventModal({
               id="location"
               label="Location"
               placeholder="Enter event location"
+              ref={placeAutoCompleteRef}
               defaultValue={location}
-              onChangeEvent={(e: React.ChangeEvent<HTMLInputElement>) =>
-                setLocation(e.target.value)
-              }
               addlClass="text-green-900"
             />
             <div className="flex space-x-4">

@@ -19,8 +19,12 @@ export interface Profile {
 interface AppContextType {
   profile: Profile;
   token: string;
+  cityCoordinates: [number, number];
+  tripId: number | null;
   setProfile: (profile: Profile) => void;
   setToken: (token: string) => void;
+  setCityCoordinates: (coordinates: [number, number]) => void;
+  setTripId: (id: number | null) => void;
 }
 
 const AppContext = createContext<AppContextType>({
@@ -32,8 +36,12 @@ const AppContext = createContext<AppContextType>({
     email: "",
   },
   token: "",
+  cityCoordinates: [0, 0],
+  tripId: null,
   setProfile: () => {},
   setToken: () => {},
+  setCityCoordinates: () => {},
+  setTripId: () => {},
 });
 
 // : is for type annotation - specifies type of a variable, function parameter, or function return value
@@ -48,6 +56,10 @@ export function AppWrapper({ children }: { children: ReactNode }) {
     email: "",
   });
   const [token, setToken] = useState<string>("");
+  const [cityCoordinates, setCityCoordinates] = useState<[number, number]>([
+    0, 0,
+  ]);
+  const [tripId, setTripId] = useState<number | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -69,7 +81,18 @@ export function AppWrapper({ children }: { children: ReactNode }) {
   }, [token]);
 
   return (
-    <AppContext.Provider value={{ profile, token, setToken, setProfile }}>
+    <AppContext.Provider
+      value={{
+        profile,
+        token,
+        cityCoordinates,
+        tripId,
+        setToken,
+        setProfile,
+        setCityCoordinates,
+        setTripId,
+      }}
+    >
       {children}
     </AppContext.Provider>
   );

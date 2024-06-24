@@ -10,11 +10,13 @@ import { DayColumn, Day } from "../../../components/day/card";
 import UserTripModal from "../../../components/usertrip/form-modal";
 import UpdateTripForm from "../../../components/trip/edit-form-modal";
 import { Map } from "../../../components/trip/map";
+import { useAppContext } from "../../../context/state";
 
 export default function TripDetails() {
   const [showModal, setShowModal] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+  const { setCityCoordinates, setTripId } = useAppContext();
   const {
     data: trip,
     isLoading: isLoadingTrip,
@@ -24,13 +26,18 @@ export default function TripDetails() {
     queryFn: () => getTripById(Number(id)),
     enabled: !!id,
   });
-  const [coordinates, setCoordinates] = useState<[number, number]>([0, 0]);
+
+  useEffect(() => {
+    if (id) {
+      setTripId(Number(id));
+    }
+  }, [id]);
 
   useEffect(() => {
     const fetchCoordinates = async () => {
       if (trip?.city) {
         try {
-          setCoordinates([trip.latitude, trip.longitude]);
+          setCityCoordinates([trip.latitude, trip.longitude]);
         } catch (error) {
           console.error("Error occurred while fetching coordinates:", error);
         }
@@ -149,7 +156,7 @@ export default function TripDetails() {
                       <DayColumn key={day.id} day={day} />
                     ))}
                 </div>
-                <Map coordinates={coordinates} />
+                <Map />
               </div>
             </div>
           </div>

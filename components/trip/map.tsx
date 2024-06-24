@@ -3,10 +3,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { LatLong } from "../../types";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { Input } from "../form-elements";
+import { useAppContext } from "../../context/state";
 
 const libs: Library[] = ["core", "maps", "places", "marker"];
 
-export function Map(latlong: LatLong) {
+interface MapProps {
+  events: Event[];
+}
+
+export function Map({ events }: MapProps) {
   // const mapRef = React.useRef<HTMLDivElement>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [autoComplete, setAutoComplete] =
@@ -20,13 +25,14 @@ export function Map(latlong: LatLong) {
   const [infoWindow, setInfoWindow] = useState<google.maps.InfoWindow | null>(
     null
   );
+  const { cityCoordinates } = useAppContext();
 
   useEffect(() => {
     if (isLoaded) {
       const mapOptions = {
         center: {
-          lat: latlong.coordinates[0],
-          lng: latlong.coordinates[1],
+          lat: cityCoordinates[0],
+          lng: cityCoordinates[1],
         },
         zoom: 16,
         mapId: "MY-MAP",
@@ -39,12 +45,12 @@ export function Map(latlong: LatLong) {
 
       const cityBounds = new google.maps.LatLngBounds(
         new google.maps.LatLng(
-          latlong.coordinates[0] - 0.5,
-          latlong.coordinates[1] - 0.5
+          cityCoordinates[0] - 0.5,
+          cityCoordinates[1] - 0.5
         ),
         new google.maps.LatLng(
-          latlong.coordinates[0] + 0.5,
-          latlong.coordinates[1] + 0.5
+          cityCoordinates[0] + 0.5,
+          cityCoordinates[1] + 0.5
         )
       );
 
@@ -92,7 +98,7 @@ export function Map(latlong: LatLong) {
       setAutoComplete(gAutoComplete);
       setMap(gMap);
     }
-  }, [isLoaded, latlong]);
+  }, [isLoaded, cityCoordinates]);
   return (
     <div className="flex flex-col space-y-4">
       <Input id="autocomplete" ref={placeAutoCompleteRef} />
